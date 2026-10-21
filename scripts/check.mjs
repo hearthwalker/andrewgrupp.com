@@ -20,7 +20,15 @@ for(const file of pages){
   assert(/property="og:url"/.test(html),'Open Graph URL missing');
   assert(!/<script(?![^>]*application\/ld\+json)/.test(html),'unexpected client-side JavaScript');
   assert(!/href="#"/.test(html),'dead placeholder link');
-  for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/alt="[^"]+"/.test(img[0]),'image requires meaningful alt text');
+  for(const img of html.matchAll(/<img\b[^>]*>/g)){
+    assert(/alt="[^"]+"/.test(img[0]),'image requires meaningful alt text');
+  }
+  for(const match of html.matchAll(/srcset="([^"]+)"/g)){
+    for(const candidate of match[1].split(',')){
+      const url=candidate.trim().split(/\s+/)[0];
+      try{await stat(path.resolve(path.dirname(file),url));checked++;}catch{errors.push(`${label}: broken responsive image ${url}`)}
+    }
+  }
   for(const match of html.matchAll(/(?:href|src)="([^"]+)"/g)){
     const link=match[1].replaceAll('&amp;','&');
     if(/^(https:|mailto:)/.test(link))continue;

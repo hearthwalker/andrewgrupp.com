@@ -9,8 +9,27 @@
   ],
   "email": "hello@andrewgrupp.com",
   "emailEnabled": false,
-  "photograph": null,
-  "photographAlt": null,
+  "photograph": "assets/photography/andrew-grupp-monochrome-800.jpg",
+  "photographSmall": "assets/photography/andrew-grupp-monochrome-480.jpg",
+  "photographAlt": "Black-and-white portrait of Andrew Grupp wearing glasses and a knit sweater.",
+  "landscapes": {
+    "home": {
+      "image": "assets/photography/lake-and-hills-1440.jpg",
+      "small": "assets/photography/lake-and-hills-720.jpg",
+      "width": 1440,
+      "height": 1440,
+      "smallWidth": 720,
+      "alt": "Black-and-white landscape of a still lake beneath low hills, with textured rocks in the foreground."
+    },
+    "writing": {
+      "image": "assets/photography/rocky-shore-1080.jpg",
+      "small": "assets/photography/rocky-shore-540.jpg",
+      "width": 1080,
+      "height": 1920,
+      "smallWidth": 540,
+      "alt": "Black-and-white photograph of waves reaching a rocky lakeshore beneath an overcast sky."
+    }
+  },
   "books": [
     {
       "slug": "ash-and-pine",

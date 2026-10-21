@@ -16,12 +16,19 @@ if (new Set(site.books.map(b => b.slug)).size !== site.books.length || new Set(e
 if (site.email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(site.email)) throw new Error('Invalid correspondence email.');
 if (site.photograph && !site.photographAlt) throw new Error('Author photograph requires alt text.');
 for (const book of site.books) if (book.cover && !book.coverAlt) throw new Error('Book cover requires alt text.');
+for (const photo of Object.values(site.landscapes || {})) if (!photo.alt || !photo.width || !photo.height) throw new Error('Landscape photographs require alt text and dimensions.');
 await rm(out, {recursive:true, force:true});
 await mkdir(out, {recursive:true});
 await cp(path.join(root,'public'), out, {recursive:true});
 const pages = [];
 const arrow = '<span class="arrow" aria-hidden="true">→</span>';
 const paragraphs = values => values.map(p => `<p>${esc(p)}</p>`).join('\n');
+const landscape = (placement, href) => {
+  const photo = site.landscapes?.[placement];
+  if (!photo) return '';
+  const sizes = '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 64px), (max-width: 1272px) calc(100vw - 112px), 1160px';
+  return `<figure class="landscape landscape-${placement} shell"><div class="landscape-frame"><img src="${href(assetPath(photo.image))}"${photo.small ? ` srcset="${href(assetPath(photo.small))} ${photo.smallWidth}w, ${href(assetPath(photo.image))} ${photo.width}w" sizes="${sizes}"` : ''} alt="${esc(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async"></div><figcaption>Photograph by Andrew Grupp</figcaption></figure>`;
+};
 const dateLabel = date => { const parsed = new Date(`${date}T12:00:00Z`); if (Number.isNaN(parsed.valueOf()) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Invalid journal date.'); return new Intl.DateTimeFormat('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'}).format(parsed); };
 
 async function page(route, title, description, active, render, {type='website', schema=null, index=true}={}) {
@@ -76,13 +83,13 @@ await page('', 'Andrew Grupp — Poetry, Prose & Literary Fiction', site.introdu
 <div class="hero-grid"><h1 id="author-name"><span>Andrew</span> <span>Grupp</span></h1><div class="hero-copy"><p class="identity">Poetry, prose &amp;<br>literary fiction.</p><p class="intro">${esc(site.introduction)}</p><a class="text-link" href="${href('about/')}">About the author ${arrow}</a></div></div>
 <div class="hero-bottom"><p>Published writing &amp; work in progress</p></div>
 </section>
-<section class="writing-band" aria-labelledby="writing-heading"><div class="shell"><div class="section-heading"><h2 id="writing-heading">The writing</h2><a href="${href('writing/')}">Explore the bibliography</a></div><div class="home-books">${site.books.map(book => `<a class="home-book" href="${href(`writing/${book.slug}/`)}"><div><span class="eyebrow">${esc(book.category)}</span><h3>${esc(book.title)}</h3><p>${esc(book.status)}</p></div>${arrow}</a>`).join('')}</div></div></section>`);
+<section class="writing-band" aria-labelledby="writing-heading"><div class="shell"><div class="section-heading"><h2 id="writing-heading">The writing</h2><a href="${href('writing/')}">Explore the bibliography</a></div><div class="home-books">${site.books.map(book => `<a class="home-book" href="${href(`writing/${book.slug}/`)}"><div><span class="eyebrow">${esc(book.category)}</span><h3>${esc(book.title)}</h3><p>${esc(book.status)}</p></div>${arrow}</a>`).join('')}</div></div></section>${landscape('home',href)}`);
 
 await page('writing/', 'Writing — Andrew Grupp', 'Published writing and work in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `
-<div class="shell"><header class="page-heading"><span class="eyebrow">Bibliography</span><h1>Writing</h1><p class="deck">Published work and works in progress.</p></header><div class="bibliography">${site.books.map(book => `<article class="book-row"><p class="book-kind">${esc(book.category)}</p><div><h2><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a></h2><p>${esc(book.subtitle)}</p><p class="status">${esc(book.status)}</p></div><a class="text-link row-link" href="${href(`writing/${book.slug}/`)}" aria-label="About ${esc(book.title)}">About the book ${arrow}</a></article>`).join('')}</div></div>`);
+<div class="shell"><header class="page-heading"><span class="eyebrow">Bibliography</span><h1>Writing</h1><p class="deck">Published work and works in progress.</p></header><div class="bibliography">${site.books.map(book => `<article class="book-row"><p class="book-kind">${esc(book.category)}</p><div><h2><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a></h2><p>${esc(book.subtitle)}</p><p class="status">${esc(book.status)}</p></div><a class="text-link row-link" href="${href(`writing/${book.slug}/`)}" aria-label="About ${esc(book.title)}">About the book ${arrow}</a></article>`).join('')}</div></div>${landscape('writing',href)}`);
 
 await page('about/', 'About — Andrew Grupp', 'Andrew Grupp is a Nebraska-based writer of poetry, prose, and literary fiction, and the author of Ash and Pine.', 'About', href => `
-<div class="shell"><header class="page-heading"><span class="eyebrow">The author</span><h1>About Andrew</h1></header><div class="prose-layout"><p class="eyebrow">Based in Nebraska</p><div class="prose">${site.photograph ? `<img class="portrait" src="${href(assetPath(site.photograph))}" alt="${esc(site.photographAlt)}" loading="lazy">` : ''}${paragraphs(site.biography)}<a class="text-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div></div></div>`, {schema:{'@context':'https://schema.org','@type':'Person',name:site.name,url:`${origin}/about/`,description:site.introduction,jobTitle:'Writer'}});
+<div class="shell"><header class="page-heading"><span class="eyebrow">The author</span><h1>About Andrew</h1></header><div class="about-layout">${site.photograph ? `<img class="portrait" src="${href(assetPath(site.photograph))}"${site.photographSmall ? ` srcset="${href(assetPath(site.photographSmall))} 480w, ${href(assetPath(site.photograph))} 800w" sizes="(max-width: 600px) 260px, 300px"` : ''} alt="${esc(site.photographAlt)}" width="800" height="800" decoding="async">` : ''}<div class="prose"><p class="eyebrow">Based in Nebraska</p>${paragraphs(site.biography)}<a class="text-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div></div></div>`, {schema:{'@context':'https://schema.org','@type':'Person',name:site.name,url:`${origin}/about/`,description:site.introduction,jobTitle:'Writer',...(site.photograph ? {image:`${origin}/${assetPath(site.photograph)}`} : {})}});
 
 for (const book of site.books) {
   const other = site.books.find(b => b.slug !== book.slug);

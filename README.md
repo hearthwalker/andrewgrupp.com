@@ -24,9 +24,12 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 - **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link.
 - **Actual cover:** add an approved file to `public/assets/`, set `cover` to e.g. `assets/ash-and-pine-cover.webp`, and provide `coverAlt`. No invented cover is displayed.
 - **Author photograph:** add an approved image, set `photograph` and `photographAlt`. It appears only on About. Strip private EXIF/location metadata before adding it.
+- **Landscapes:** `landscapes.home` and `landscapes.writing` hold Andrew’s own photographs, alt text, dimensions, and responsive image paths. They appear after the writing sections with a photographer credit. Display framing is controlled by CSS; the image files retain their compositions.
 - **Social card:** `shareImage` points to the site’s typographic card, not a portrait or a book cover.
 
 The editable social-card layout is in `scripts/share-card.html`. To regenerate the raster asset, serve that layout with the site fonts at `/assets/fonts/`, render at 1200 × 630, and replace `public/assets/social-card.jpg` with the resulting JPEG.
+
+The supplied originals are retained locally in the ignored `reference-assets/` folder. The public site includes only selected JPEG derivatives without source EXIF metadata: the lake and hills on Home, rocky shore on Writing, and black-and-white portrait on About. The cliff photograph and color portrait remain available locally for future use. Photographs are not presented as book covers or as locations from Housefall.
 
 Book metadata lives with each book. Housefall is historical fiction in progress, with no implied release date.
 
