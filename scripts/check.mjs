@@ -40,6 +40,7 @@ for(const file of pages){
 const css=await readFile(path.join(root,'assets/style.css'),'utf8');
 for(const match of css.matchAll(/url\('([^']+)'\)/g)){try{await stat(path.resolve(root,'assets',match[1]));checked++;}catch{errors.push(`Missing CSS asset: ${match[1]}`)}}
 const content=JSON.parse(await readFile('content/site.json','utf8'));
+if(content.shareImage){try{await stat(path.join(root,content.shareImage));checked++;}catch{errors.push('Missing Open Graph image')}}
 if(!content.journal.some(e=>e.published===true) && files.some(f=>path.relative(root,f).startsWith('journal'+path.sep))) errors.push('Empty journal must not be published');
 if(!content.emailEnabled && (await readFile(path.join(root,'contact/index.html'),'utf8')).includes('mailto:'))errors.push('Inactive mailbox must not be linked');
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`PASS: ${pages.length} HTML pages, ${checked} local links/assets, metadata, landmarks, image alt text, structured data, inactive email, and journal visibility.`);

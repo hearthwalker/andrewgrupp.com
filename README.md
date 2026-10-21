@@ -26,6 +26,8 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 - **Author photograph:** add an approved image, set `photograph` and `photographAlt`. It appears only on About. Strip private EXIF/location metadata before adding it.
 - **Social card:** `shareImage` points to the site’s typographic card, not a portrait or a book cover.
 
+The editable social-card layout is in `scripts/share-card.html`. To regenerate the raster asset, serve that layout with the site fonts at `/assets/fonts/`, render at 1200 × 630, and replace `public/assets/social-card.jpg` with the resulting JPEG.
+
 Book metadata lives with each book. Housefall is historical fiction in progress, with no implied release date.
 
 ## Publish a journal entry
