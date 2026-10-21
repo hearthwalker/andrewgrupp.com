@@ -1,0 +1,50 @@
+{
+  "name": "Andrew Grupp",
+  "identity": "Poetry, prose & literary fiction",
+  "introduction": "Andrew Grupp is a Nebraska-based author writing poetry, prose, and literary fiction.",
+  "biography": [
+    "Andrew Grupp is a writer based in Nebraska. His work spans poetry, prose, and literary fiction.",
+    "He is the author of Ash and Pine: A Collection of Prose and Poetry, published in October 2026. He is currently at work on Housefall, a literary historical novel."
+  ],
+  "email": "hello@andrewgrupp.com",
+  "emailEnabled": false,
+  "photograph": null,
+  "photographAlt": null,
+  "books": [
+    {
+      "slug": "ash-and-pine",
+      "title": "Ash and Pine",
+      "subtitle": "A Collection of Prose and Poetry",
+      "category": "Prose & poetry",
+      "status": "Published October 2026",
+      "year": "2026",
+      "description": [
+        "Poems and essays from the road, the lakeshore and the long winters between. About a daughter never held and children 800 miles away. About a God who didn't show. And a fire that stayed lit anyway.",
+        "Ash and Pine: A Collection of Prose and Poetry gathers years of writing about fatherhood, grief, faith and the stubborn work of staying human when life has given you every reason to become something harder.",
+        "Across humid Tuesday nights, storm-battered camps and dark parking lots a long way from home, Andrew Grupp explores what remains when certainty falls apart — and what we can rebuild from the pieces. These are reflections on the unraveling of old beliefs and the unexpected sacredness of ordinary things: a discount kitchen table bearing a dog's tooth marks, a diesel heater squaring its shoulders against the cold, a three-legged plastic dinosaur in an old ammo crate and the people we carry with us even when they're gone.",
+        "There are no easy answers here. No promises that suffering happens for a reason, or that everything broken will someday be made whole.",
+        "Only the conviction that kindness is a discipline. That solitude is a practice. That even in the ash, there is still an ember worth tending. And that sometimes, surviving another winter is its own quiet act of courage.",
+        "Come sit awhile. There's room beside the fire. May none cross winter left behind."
+      ],
+      "cover": null,
+      "coverAlt": null,
+      "purchaseUrl": "https://www.amazon.com/dp/B0HN6P7XNH",
+      "playlistUrl": "https://open.spotify.com/playlist/30BQHSBfjqc9lTErFWJiLp"
+    },
+    {
+      "slug": "housefall",
+      "title": "Housefall",
+      "subtitle": "A literary historical novel",
+      "category": "Historical fiction",
+      "status": "In progress",
+      "year": null,
+      "tagline": "The hall still stands. Everything that made it a home is gone.",
+      "description": [],
+      "cover": null,
+      "coverAlt": null,
+      "purchaseUrl": null,
+      "playlistUrl": null
+    }
+  ],
+  "journal": []
+}
