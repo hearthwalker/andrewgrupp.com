@@ -6,9 +6,8 @@ Intended domain: **andrewgrupp.com**. Registration and ownership are unconfirmed
 
 1. Register or confirm ownership of `andrewgrupp.com` and provide access to its DNS settings when ready.
 2. Create and test `hello@andrewgrupp.com` with a mail provider. GitHub Pages does not provide email. Set `emailEnabled` to `true` only after receiving a test message successfully.
-3. Supply the actual Ash and Pine cover if it should appear. This is an optional visual addition, not a requirement for launching the text-led site.
 
-Photography and journal entries are optional. The approved Ash and Pine description, Amazon purchase URL, and companion Spotify playlist are configured.
+The mandatory Ash and Pine front cover is extracted from Andrew's approved final PDF and integrated locally. The book description and confirmed product/playlist links are preserved. Housefall uses Andrew's supplied promotional synopsis and remains historical fiction in progress, with no publication date or purchase link. There are no remaining redesign content approvals. Journal and correspondence remain hidden until functional content or a tested mailbox is available.
 
 ## Current GitHub Pages setup
 

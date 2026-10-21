@@ -1,11 +1,12 @@
 {
   "name": "Andrew Grupp",
-  "shareImage": "assets/social-card.jpg",
-  "identity": "Poetry, prose & literary fiction",
-  "introduction": "Andrew Grupp is a Nebraska-based author writing poetry, prose, and literary fiction.",
+  "shareImage": "assets/social-card-editorial.jpg",
+  "identity": "Poetry, prose and literary fiction",
+  "introduction": "Writing about the unraveling of old beliefs and the unexpected sacredness of ordinary things.",
   "biography": [
-    "Andrew Grupp is a writer based in Nebraska. His work spans poetry, prose, and literary fiction.",
-    "He is the author of Ash and Pine: A Collection of Prose and Poetry, published in October 2026. He is currently at work on Housefall, a literary historical novel."
+    "Andrew Grupp is the author of Ash and Pine: A Collection of Prose and Poetry (2026). The collection gathers poems and essays on fatherhood, grief, faith and the practice of kindness.",
+    "He lives in Nebraska and is currently writing Housefall, a literary historical novel set in the Northern Marches.",
+    "The landscape photographs on this site are his own."
   ],
   "email": "hello@andrewgrupp.com",
   "emailEnabled": false,
@@ -35,9 +36,10 @@
       "slug": "ash-and-pine",
       "title": "Ash and Pine",
       "subtitle": "A Collection of Prose and Poetry",
-      "category": "Prose & poetry",
+      "category": "Prose and poetry",
       "status": "Published October 2026",
       "year": "2026",
+      "publicationDate": "2026-10",
       "description": [
         "Poems and essays from the road, the lakeshore and the long winters between. About a daughter never held and children 800 miles away. About a God who didn't show. And a fire that stayed lit anyway.",
         "Ash and Pine: A Collection of Prose and Poetry gathers years of writing about fatherhood, grief, faith and the stubborn work of staying human when life has given you every reason to become something harder.",
@@ -46,8 +48,12 @@
         "Only the conviction that kindness is a discipline. That solitude is a practice. That even in the ash, there is still an ember worth tending. And that sometimes, surviving another winter is its own quiet act of courage.",
         "Come sit awhile. There's room beside the fire. May none cross winter left behind."
       ],
-      "cover": null,
-      "coverAlt": null,
+      "cover": "assets/books/ash-and-pine-approved-720.jpg",
+      "coverSmall": "assets/books/ash-and-pine-approved-360.jpg",
+      "coverWidth": 720,
+      "coverHeight": 1113,
+      "coverAlt": "Cover of Ash and Pine: A Collection of Prose and Poetry by Andrew Grupp",
+      "coverSource": "Ash_and_Pine_COVER_FINAL.pdf",
       "purchaseUrl": "https://www.amazon.com/dp/B0HN6P7XNH",
       "playlistUrl": "https://open.spotify.com/playlist/30BQHSBfjqc9lTErFWJiLp"
     },
@@ -59,7 +65,12 @@
       "status": "In progress",
       "year": null,
       "tagline": "The hall still stands. Everything that made it a home is gone.",
-      "description": [],
+      "description": [
+        "In the Northern Marches, Marek has exchanged the wars of his youth for the quiet labors of husbandry and fatherhood. Beside his wife, Roswyn, and their four children, he has built a life measured in seasons, ordinary rituals, and the familiar comforts of home.",
+        "One winter evening, a traveler arrives seeking shelter.",
+        "Marek opens the door.",
+        "Housefall is a literary historical novel about the uneasy distance between love and loyalty, the wounds we inflict upon those we cherish, and what remains of a life when its foundations give way."
+      ],
       "cover": null,
       "coverAlt": null,
       "purchaseUrl": null,
