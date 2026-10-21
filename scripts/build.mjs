@@ -1,10 +1,12 @@
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'dist');
 const site = JSON.parse(await readFile(path.join(root, 'content/site.json'), 'utf8'));
+const styleVersion = createHash('sha256').update(await readFile(path.join(root,'public/assets/style.css'))).digest('hex').slice(0,12);
 const origin = (process.env.SITE_URL || 'https://hearthwalker.github.io/andrewgrupp.com').replace(/\/$/, '');
 if (!/^https:\/\//.test(origin)) throw new Error('SITE_URL must be an absolute HTTPS URL.');
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -59,7 +61,7 @@ ${site.shareImage ? `<meta property="og:image" content="${origin}/${assetPath(si
 <meta name="twitter:card" content="${site.shareImage ? 'summary_large_image' : 'summary'}">
 <link rel="icon" type="image/svg+xml" href="${href('assets/favicon.svg')}">
 <link rel="preload" href="${href('assets/fonts/cormorant-garamond.ttf')}" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="${href('assets/style.css')}">
+<link rel="stylesheet" href="${href('assets/style.css')}?v=${styleVersion}">
 <script type="application/ld+json">${JSON.stringify(data).replace(/</g,'\\u003c')}</script>
 </head>
 <body>

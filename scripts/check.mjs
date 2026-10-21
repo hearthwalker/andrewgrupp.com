@@ -33,7 +33,8 @@ for(const file of pages){
     const link=match[1].replaceAll('&amp;','&');
     if(/^(https:|mailto:)/.test(link))continue;
     if(link==='#main')continue;
-    const [urlPart,hash]=link.split('#');
+    const [urlWithQuery,hash]=link.split('#');
+    const urlPart=urlWithQuery.split('?')[0];
     let target;
     if(urlPart.startsWith('/')){
       const base=siteBase.pathname.replace(/\/$/,'');
