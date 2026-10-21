@@ -20,16 +20,17 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `hello@andrewgrupp.com` is reserved in the configuration. After creating and testing the mailbox, set `emailEnabled` to `true`. Until then the site publishes no email address or dead mail link.
+- **Selected writing:** the homepage links the first two books in `books`; the Writing page lists the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link.
 - **Actual cover:** Ash and Pine's approved front cover is required by the build. Its local image paths, dimensions, alt text, source record, and publication date live with its book entry. See [cover provenance](docs/COVER.md) before replacing it.
 - **Author photograph:** add an approved image, set `photograph` and `photographAlt`. It appears only on About. Strip private EXIF/location metadata before adding it.
-- **Landscapes:** `landscapes.home` supplies the square photograph integrated into the homepage's sage field. Its full composition is retained. The Writing page has no photograph. The other image records remain available for future editorial use.
+- **Landscapes:** source photography and public derivatives are retained for future editorial use. The homepage renders a flat sage color field; it does not render or request a photograph. About is the only page with an author portrait.
 - **Social card:** `shareImage` points to the site’s typographic card, not a portrait or a book cover.
 
 The editable social-card layout is in `scripts/share-card.html`. To regenerate the raster asset, serve that layout with the site fonts at `/assets/fonts/`, render at 1200 × 630, and replace `public/assets/social-card-editorial.jpg` with the resulting JPEG. Book shares use the actual front cover. Public titles and descriptors spell out **and**.
 
-The supplied photo originals are retained locally in the ignored `reference-assets/` folder. Public derivatives omit source EXIF metadata. Home uses one square landscape; About uses one restrained portrait. The rocky shore, cliff photograph and color portrait remain available for future use. Landscape photographs are not presented as book covers or locations from Housefall.
+The supplied photo originals are retained locally in the ignored `reference-assets/` folder. Public derivatives omit source EXIF metadata. Home uses no photograph; About uses one restrained portrait. The rocky shore, cliff photograph and color portrait remain available for future use. Landscape photographs are not presented as book covers or locations from Housefall.
 
 Contact is generated and linked only when both `email` and `emailEnabled` are set. Journal is generated only when published entries exist. Until then, neither page appears in navigation or the sitemap. The footer contains no inactive correspondence link.
 
@@ -64,6 +65,8 @@ For the future domain, see [the launch guide](docs/LAUNCH.md). Do not add a cust
 
 ## Design and licensing
 
-Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. Sage frames the homepage photograph; a pale sage surface holds its compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
+Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A vertical sage field with a narrow copper edge balances the homepage introduction; on phones it becomes a shallow band. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
+
+A small original inline SVG goat in the footer uses a native disclosure: hover or keyboard focus reveals "Aldric was here."; click, Enter, Space or a touch tap toggles it without JavaScript. Its 44px control encloses a 24px-high illustration.
 
 The [editorial QA record](docs/EDITORIAL-QA.md) documents the before/after screenshots and acceptance checks. Stylesheet URLs carry a content hash so returning browsers receive the current layout.

@@ -29,6 +29,7 @@ await mkdir(out, {recursive:true});
 await cp(path.join(root,'public'), out, {recursive:true});
 const pages = [];
 const arrow = '<span class="arrow" aria-hidden="true">→</span>';
+const aldric = `<details class="aldric"><summary aria-label="Aldric, a small goat ornament"><svg viewBox="0 0 42 32" width="30" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 13 5 9 2 8 3 12 7 16 8 23 6 30h4l3-8h10l2 8h4l-1-10 4-5 5-1 3-4-5-2-1-3-3 3-3-1-3 6H14Z"/><path fill="currentColor" d="m31 9-1-4-3-3-2 1 3 4 1 4Zm3-1 1-4-1-4-2 1 1 4-2 4ZM34 14l-2 5-3-4Z"/></svg></summary><span class="aldric-note">Aldric was here.</span></details>`;
 const paragraphs = values => values.map(p => `<p>${esc(p)}</p>`).join('\n');
 const dateLabel = date => { const parsed = new Date(`${date}T12:00:00Z`); if (Number.isNaN(parsed.valueOf()) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Invalid journal date.'); return new Intl.DateTimeFormat('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'}).format(parsed); };
 const pageHeading = (title, deck='') => `<header class="page-heading"><h1>${esc(title)}</h1>${deck ? `<p class="deck">${esc(deck)}</p>` : ''}</header>`;
@@ -70,7 +71,7 @@ ${social.image ? `<meta property="og:image" content="${origin}/${assetPath(socia
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header shell"><div class="header-inner"><a class="${home ? 'monogram' : 'wordmark'}" href="${href('')}" aria-label="Andrew Grupp — home">${home ? 'AG<span aria-hidden="true">.</span>' : esc(site.name)}</a><nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main" tabindex="-1">${render(href)}</main>
-<footer class="site-footer"><div class="shell footer-inner"><p>© 2026 <span class="footer-rights">All rights reserved.</span></p><nav aria-label="Footer navigation">${nav.filter(([,label])=>label!=='Home').map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav><p class="footer-location">Nebraska</p></div></footer>
+<footer class="site-footer"><div class="shell footer-inner"><p>© 2026 <span class="footer-rights">All rights reserved.</span></p><nav aria-label="Footer navigation">${nav.filter(([,label])=>label!=='Home').map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav><p class="footer-location">Nebraska</p>${aldric}</div></footer>
 </body>
 </html>`;
   const filename = route === '404.html' ? '404.html' : `${route}index.html`;
@@ -81,9 +82,8 @@ ${social.image ? `<meta property="og:image" content="${origin}/${assetPath(socia
 }
 
 await page('', 'Andrew Grupp — Poetry, Prose and Literary Fiction', site.introduction, 'Home', href => {
-  const photo = site.landscapes?.home;
-  return `<section class="opening shell" aria-labelledby="author-name"><div class="opening-copy"><p class="kicker">${esc(site.identity)}</p><h1 id="author-name">${esc(site.name)}</h1><p class="opening-intro">${esc(site.introduction)}</p><a class="text-link primary-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div>${photo ? `<figure class="opening-art"><img src="${href(assetPath(photo.image))}" srcset="${href(assetPath(photo.small))} ${photo.smallWidth}w, ${href(assetPath(photo.image))} ${photo.width}w" sizes="(max-width: 760px) calc(100vw - 104px), 390px" alt="${esc(photo.alt)}" width="${photo.width}" height="${photo.height}" decoding="async" fetchpriority="high"></figure>` : ''}</section>
-<section class="selected-writing" aria-labelledby="selected-title"><div class="shell selected-inner"><h2 id="selected-title">Selected writing</h2><div class="selected-list">${site.books.map(book=>`<p><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a><span>${esc(book.year || book.status)}</span></p>`).join('')}</div></div></section>`;
+  return `<section class="opening shell" aria-labelledby="author-name"><div class="opening-copy"><p class="kicker">${esc(site.identity)}</p><h1 id="author-name">${esc(site.name)}</h1><p class="opening-intro">${esc(site.introduction)}</p><a class="text-link primary-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div><div class="opening-field" aria-hidden="true"></div></section>
+<section class="selected-writing" aria-labelledby="selected-title"><div class="shell selected-inner"><h2 id="selected-title">Selected writing</h2><div class="selected-list">${site.books.slice(0,2).map(book=>`<p><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a><span>${esc(book.year || book.status)}</span></p>`).join('')}</div></div></section>`;
 });
 
 await page('writing/', 'Writing — Andrew Grupp', 'Published work and literary fiction in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `<div class="shell page-content">${pageHeading('Writing','Books and works in progress.')}<div class="bibliography">${site.books.map(book => `<article class="book-row"><p class="book-state">${esc(book.status)}</p><div><h2><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a></h2><p class="book-subtitle">${esc(book.subtitle)}</p></div><a class="text-link row-link" href="${href(`writing/${book.slug}/`)}" aria-label="Read about ${esc(book.title)}">Read more ${arrow}</a></article>`).join('')}</div></div>`);

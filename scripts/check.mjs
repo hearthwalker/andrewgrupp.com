@@ -21,6 +21,8 @@ for(const file of pages){
   assert(/property="og:url"/.test(html),'Open Graph URL missing');
   assert(!/<script(?![^>]*application\/ld\+json)/.test(html),'unexpected client-side JavaScript');
   assert(!/href="#"/.test(html),'dead placeholder link');
+  assert(/<details class="aldric"><summary aria-label="Aldric, a small goat ornament">/.test(html),'keyboard/touch goat disclosure missing');
+  assert(/<span class="aldric-note">Aldric was here\.<\/span>/.test(html),'Aldric discovery text missing');
   const readable=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'').replace(/<[^>]*>/g,' ').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replaceAll('&quot;','"').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');
   assert(!readable.includes('&'),'unnecessary ampersand in literary copy or title');
   assert(!/Ash\s*(?:&|&amp;)\s*Pine/i.test(html),'incorrect published book title');
@@ -63,6 +65,10 @@ if(!content.journal.some(e=>e.published===true) && files.some(f=>path.relative(r
 if(!content.emailEnabled && files.some(f=>path.relative(root,f).startsWith('contact'+path.sep)))errors.push('Inactive Contact page must not be generated');
 const home=await readFile(path.join(root,'index.html'),'utf8');
 const homeText=home.split('<body')[1].replace(/<[^>]*>/g,' ');
+if(/<img\b|<figure\b|photography\//.test(home))errors.push('Homepage must not render or preload photography');
+if(!home.includes('<div class="opening-field" aria-hidden="true"></div>'))errors.push('Homepage color field missing');
+if(/opening-art|white-space:nowrap[^}]*opening/.test(css))errors.push('Obsolete photograph styling or forced hero nowrap');
+if(content.biography.some(p=>p.includes('landscape photographs')))errors.push('Biography must not claim landscape photographs absent from the site');
 if((homeText.match(/Andrew Grupp/g)||[]).length!==1)errors.push('Homepage must display the full author name exactly once');
 if((homeText.match(/Poetry, prose and literary fiction/g)||[]).length!==1)errors.push('Homepage genre descriptor must occur exactly once');
 const ash=content.books.find(b=>b.slug==='ash-and-pine');

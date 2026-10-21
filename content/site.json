@@ -5,8 +5,7 @@
   "introduction": "Writing about the unraveling of old beliefs and the unexpected sacredness of ordinary things.",
   "biography": [
     "Andrew Grupp is the author of Ash and Pine: A Collection of Prose and Poetry (2026). The collection gathers poems and essays on fatherhood, grief, faith and the practice of kindness.",
-    "He lives in Nebraska and is currently writing Housefall, a literary historical novel set in the Northern Marches.",
-    "The landscape photographs on this site are his own."
+    "He lives in Nebraska and is currently writing Housefall, a literary historical novel set in the Northern Marches."
   ],
   "email": "hello@andrewgrupp.com",
   "emailEnabled": false,
@@ -14,14 +13,6 @@
   "photographSmall": "assets/photography/andrew-grupp-monochrome-480.jpg",
   "photographAlt": "Black-and-white portrait of Andrew Grupp wearing glasses and a knit sweater.",
   "landscapes": {
-    "home": {
-      "image": "assets/photography/lake-and-hills-1440.jpg",
-      "small": "assets/photography/lake-and-hills-720.jpg",
-      "width": 1440,
-      "height": 1440,
-      "smallWidth": 720,
-      "alt": "Black-and-white landscape of a still lake beneath low hills, with textured rocks in the foreground."
-    },
     "writing": {
       "image": "assets/photography/rocky-shore-1080.jpg",
       "small": "assets/photography/rocky-shore-540.jpg",

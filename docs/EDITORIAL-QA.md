@@ -1,36 +1,51 @@
-# Editorial redesign verification — October 21, 2026
+# Editorial review, round three - October 21, 2026
 
-The redesign preserves the static Node build, central JSON content, self-hosted typefaces, CSS-only presentation, GitHub Pages workflow, metadata, and project-path support. No runtime dependencies, client-side JavaScript, analytics, DNS changes, or forms were introduced.
+The static Node build, central JSON content, self-hosted fonts, metadata, GitHub Pages workflow and project-path URLs remain in place. No client JavaScript, production dependencies, tracking, DNS changes or mailbox activation were introduced.
 
-## Before and after
+## Design changes
 
-Local screenshot archive: `artifacts/editorial-redesign/` (ignored by Git).
+The old homepage combined a 104px potential headline with a large framed landscape. The revised opening uses a 72px desktop name (64px at laptop width; approximately 53px at 390px and 44px at 320px), natural wrapping and restrained tracking. A vertical matte sage field with a 3px copper edge replaces the photograph. At phone widths it becomes a 64px band. No homepage image is rendered or preloaded. Original photography assets remain safely retained.
 
-- `before/`: current-site full-page browser screenshots of Home, Writing, About, Ash and Pine, and Housefall at 1440 and 390 pixels.
-- `after/`: all five redesigned pages at 1440, 1024, 390 and 320 pixels. Numbered files are original, settled browser viewport captures covering the entire document. The corresponding unnumbered images assemble those captures by their measured scroll offsets, without changing page content.
-- `review-1440.jpg`, `review-1024.jpg`, `review-390.jpg`, `review-320.jpg`: comparison sheets used for visual review.
-- `metrics.json`: viewport sizes, scroll positions, overflow and image-load measurements for 43 final browser captures, covering 20 page/width combinations.
-- `contrast.json` and `keyboard-focus.jpg`: contrast and keyboard checks.
+Selected writing is subordinate to its linked titles. It displays the first two configured books; the Writing bibliography displays all books. The forest footer is shorter and contains a small original SVG goat, 24px high inside a 44px native disclosure control. Hover/focus reveals "Aldric was here."; click/tap or Enter/Space toggles the disclosure without JavaScript. The note is outside document flow, so opening it does not change footer or document height.
 
-Comparison findings: the opening now contains one visible full name and one genre descriptor; the introductory thought is adapted from the author-approved Ash and Pine description. The photograph is integrated into the opening, with its complete square composition and a visible sage field. Compact title links replace the larger book band. Forest appears as a deliberate footer surface. Copper accents and readable darker copper metadata provide warmth. Writing is now a text-first bibliography without a disconnected photograph. About adds confirmed book, fiction and photography facts without personal history. The supplied Housefall synopsis is used verbatim, with its first line retained as the existing tagline.
+Interior headings are smaller and consistent. Housefall uses a 66px desktop heading and 34px tagline, reduced to 54px and 28-29px on phones. Writing keeps its text bibliography. About retains the approved portrait and public biography, with the obsolete landscape-photography sentence removed. All book configuration fields, including the approved descriptions, URLs, cover provenance and Housefall tagline, compare identically to the preceding commit. Cover files are unchanged and remain uncropped.
 
-The narrow-mobile pass found and corrected an awkward wrap in the interior navigation. At 320 pixels it now uses a deliberate two-row header; all three navigation items stay together. Prose measures and cover framing were inspected above and below the fold. No horizontal overflow or unloaded images remained in the final 20 page/width combinations.
+## Browser evidence
 
-## Acceptance checks
+Local archive: `artifacts/redesign-v3/` (ignored by Git).
 
-- `npm run build` and `npm run check` pass. On this machine npm is run through an untracked local copy of its official CLI because the bundled Node executable has no npm shim on PATH; package scripts and production dependencies are unchanged.
-- Six HTML files (five content pages plus 404), 80 local link/asset references, responsive images, sitemap, metadata, JSON-LD, language, headings, landmarks and alt text are checked.
-- The homepage visibly displays the full author name exactly once and the genre descriptor exactly once.
-- Visitor-facing title and literary copy use **and**. The validator checks actual text and metadata without rewriting technical entities or URL parameters. The regenerated social card also spells out **and**.
-- The approved cover is rendered from Andrew's final PDF, in full, with local responsive images and the print trim ratio. See `COVER.md` for provenance and extraction coordinates.
-- The original Ash and Pine description, Amazon link and Spotify link are preserved. The Amazon listing was opened and visually verified during the source audit; the Spotify destination was confirmed during the preceding build.
-- Housefall has the author-supplied synopsis, no release date, no purchase link, no invented cover and no autobiographical interpretation.
-- Contact and Journal are absent from the build, navigation and sitemap while inactive. No placeholders or nonfunctional contact controls are advertised.
-- Keyboard activation of Skip to content focuses the main landmark; the next Tab focuses Explore the writing with a visible solid outline. Links remain native keyboard controls.
-- Rendered text contrast checks passed on the five content pages, including muted metadata and the forest footer. No text is overlaid on photography; the exact sage and copper colors are used as surfaces or ornament where needed for contrast.
+- `before/` and `after/`: full-page records of Home, Writing, About, Ash and Pine, and Housefall at **1440, 1024, 768, 390 and 320px**. All 50 page/width/phase combinations were captured in the browser. Numbered files are settled original viewport images; unnumbered images assemble them at recorded scroll offsets without altering page content.
+- `before-{width}.jpg`, `after-{width}.jpg`: five-page review sheets.
+- `comparison-home-1440.jpg`, `comparison-home-390.jpg`: representative before/after comparisons.
+- `metrics.json`: screenshot geometry, overflow and image-load evidence.
+- `contrast.json`: rendered foreground/background text checks for all five pages.
+- `keyboard-primary.jpg`, `goat-keyboard.jpg`, `goat-hover.jpg`: focus and discovery evidence.
+- `live/`: staging verification after publication.
 
-## Handoff
+The 320px review led to an additional reduction from 46px to 44px, allowing the name to stay on one line without `nowrap` or compressed tracking. The final 25 revised combinations show no horizontal overflow or unloaded images. Full cover framing and portrait proportions were visually reviewed, as were complete prose columns. Narrow interior navigation retains its deliberate two-row header.
+
+## Checks
+
+- `npm run build` and `npm run check` pass for both the GitHub project path and future custom-domain root. A local official npm CLI is used because this machine has no npm shim on PATH; production tooling is unchanged.
+- Six HTML files (five content pages plus 404) and 77 local links/assets pass checks, including responsive images, metadata, JSON-LD, skip destination, landmarks, alt text and inactive Contact/Journal exclusions.
+- Homepage checks prohibit photography and require the aria-hidden color field. Every generated page must include the native goat disclosure and exact discovery text. No stale landscape claim remains in the biography.
+- Skip to content reaches main; the next Tab reaches Explore the writing with a visible focus outline. Space toggles the goat, and its note is visible on keyboard focus, pointer hover and click activation. The target measures 44 by 44 CSS pixels. Opening/closing it leaves document and footer heights unchanged. Pointer activation exercises the same native disclosure behavior available to touch users; no physical touchscreen test was performed.
+- Rendered text contrast passes WCAG AA thresholds, including small metadata, footer text and the large monogram's copper dot. The sage field and copper edge carry no text. These are accessibility basics, not a formal conformance audit.
+- The Ash and Pine cover, responsive variants, source record and alt text remain unchanged. Housefall remains historical fiction in progress with the approved synopsis and tagline verbatim, no invented date, cover or purchase destination.
+
+## Art-direction critique
+
+1. **Needless scale:** the old 90-104px hierarchy is gone. The prominent cover retains its useful reading size; the mobile name was iterated after inspection.
+2. **Purpose:** the sage field supplies quiet architectural weight; the copper edge warms its boundary. Only About and the published-book page need photographic imagery. The goat remains a footer detail.
+3. **Repetition:** one prominent full name and one genre descriptor remain on Home. There are no added quotations, decorative words or repeated sales panels.
+4. **Empty and filled space:** the desktop field is narrower than the introduction and aligns with its vertical extent; phones receive a shallow band. The compact bibliography bridges the opening and shorter footer.
+5. **Five more books:** author identity and the opening remain unchanged. Home stays at two selected works; the text bibliography can grow without an invented cover grid.
+6. **Author identity:** typography, plain bibliographic links and substantial reading columns lead. No photography-gallery hero, storefront cards or generic marketing controls remain.
+
+## Publication and decisions
 
 Staging: https://hearthwalker.github.io/andrewgrupp.com/
 
-The final staging deployment and its cover must be personally checked in the browser after the commit is published. Deployment evidence is saved under `artifacts/editorial-redesign/live/`. Custom-domain registration/DNS and mailbox activation remain future author tasks; they do not expose incomplete destinations on this staging site.
+The scoped commit is deployed through the established GitHub Actions workflow and the staging result is opened after deployment. Deployment evidence and commit/run identifiers are recorded in the local `RESULTS.md` handoff.
+
+No author decision is required for this refinement. The existing introduction is preserved, with no new personal testimony proposed or published. Domain registration/DNS and creating/testing `hello@andrewgrupp.com` remain future launch tasks; Contact stays disabled and the empty Journal stays unpublished.
