@@ -70,7 +70,9 @@ if(!home.includes('<div class="opening-field" aria-hidden="true"></div>'))errors
 if(/opening-art|white-space:nowrap[^}]*opening/.test(css))errors.push('Obsolete photograph styling or forced hero nowrap');
 if(content.biography.some(p=>p.includes('landscape photographs')))errors.push('Biography must not claim landscape photographs absent from the site');
 if((homeText.match(/Andrew Grupp/g)||[]).length!==1)errors.push('Homepage main content must display the full author name exactly once');
-if((homeText.match(/Poetry, prose and literary fiction/g)||[]).length!==1)errors.push('Homepage genre descriptor must occur exactly once');
+if(homeText.includes(content.identity))errors.push('Homepage genre descriptor must remain in metadata, not visible hero copy');
+if(home.includes('class="monogram"')||home.includes('class="wordmark"'))errors.push('Homepage header must contain navigation only');
+if(!/<title>Andrew Grupp — Poetry, Prose and Literary Fiction<\/title>/.test(home))errors.push('Homepage genre metadata missing');
 const ash=content.books.find(b=>b.slug==='ash-and-pine');
 const ashHtml=await readFile(path.join(root,'writing/ash-and-pine/index.html'),'utf8');
 if(!ash.cover || !ash.coverSource || !ashHtml.includes(`src="../../${ash.cover}"`))errors.push('Approved Ash and Pine front cover must be rendered');

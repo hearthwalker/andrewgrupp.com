@@ -65,7 +65,7 @@ For the future domain, see [the launch guide](docs/LAUNCH.md). Do not add a cust
 
 ## Design and licensing
 
-Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A broad, unbordered sage field balances the homepage introduction; on phones it becomes a shallow 64px band. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
+Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A full-height sage field occupies the right 42% of the desktop/tablet hero, reaching the viewport edge and meeting the Books band. It is omitted on phones. The homepage header contains navigation only; the visible hero contains the author name and approved introduction, while genre information remains in metadata. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
 
 A small original inline SVG goat in the footer uses a native disclosure: hover or keyboard focus reveals "Aldric was here."; click, Enter, Space or a touch tap toggles it without JavaScript. Its 44px control encloses a 24px-high illustration.
 

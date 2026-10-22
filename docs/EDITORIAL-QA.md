@@ -1,3 +1,19 @@
+# Composition refinement, v5 - October 21, 2026
+
+The homepage header now contains right-aligned navigation without the AG monogram. Interior pages retain their text wordmark. The visible hero genre line is removed; the exact approved introduction remains its only descriptive sentence. Genre information remains in the document/OG title and social-image alt metadata. The content data file, book assets, Books band, footer and Aldric markup are unchanged.
+
+The selected desktop/tablet hero uses a 58/42 paper/sage split. The sage plane occupies the complete hero height, begins immediately below the header, meets the Books section and extends to the right viewport edge. It has no content, border, inset or illustration. At 760px and below the field is omitted. Text uses the existing font sizes and page gutters.
+
+A text-only alternative was actually built and inspected at 1440, 1024 and 768px. It is retained only in the ignored review archive. The full-height field was selected because the broad right side has a clear relationship to the header and Books boundary; the text-only version left that side unstructured at larger widths. The field no longer reads as a missing photograph or a floating object. On phones the narrower text measure provides enough structure on its own, and removing the field makes the page more compact. Neither candidate enlarged the author name or added decoration.
+
+Local evidence: `artifacts/composition-v5/`. All five finished pages were inspected at 1440, 1024, 768, 390 and 320px (25 combinations), with full-page records and review sheets. Home has fresh v4/v5 comparisons at each width, plus full-field/text-only comparisons at the three larger widths. Unnumbered full-page images assemble original settled viewport captures at recorded scroll positions. An anomalous Housefall laptop capture was rechecked against its normal 66px rendered heading and replaced with a clean capture; no CSS change was needed.
+
+Geometry checks confirm that the desktop/tablet field touches the header bottom, Books top and viewport right edge within one pixel. Mobile field bounds have zero height. No overflow or unloaded images occurred in the final records. Keyboard focus and Aldric activation were rechecked. The existing build/check validates six HTML files and 76 local link/asset references; the one-reference reduction is the removed homepage monogram link. No new runtime dependency or client JavaScript is introduced.
+
+The single visible genre check is replaced with a requirement that the genre remain in metadata and not in visible main content. Home must contain neither header monogram nor wordmark. Approved copy, cover, metadata structure and disabled Contact/Journal remain protected. Complete publication evidence is recorded in the ignored local `RESULTS.md` handoff.
+
+---
+
 # Final editorial refinement, v4 - October 21, 2026
 
 Focused changes preserve the v3 name scale, fonts, book descriptions, authentic cover assets and Aldric's original SVG/native disclosure. The homepage introduction is now the author's exact sentence: "People, places, and the complicated business of being alive." This also updates its description and Open Graph metadata through the existing data-driven build.

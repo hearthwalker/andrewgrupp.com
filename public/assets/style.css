@@ -18,21 +18,20 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.05;margin:0;text
 .site-header{padding-top:27px}
 .header-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:23px;border-bottom:1px solid var(--line)}
 .wordmark{font-family:var(--serif);font-size:29px;text-decoration:none;line-height:1.2;white-space:nowrap}
-.monogram{font-family:var(--serif);font-size:33px;line-height:1;text-decoration:none;letter-spacing:-1px}
-.monogram span{color:var(--copper);margin-left:2px}
+.home-page .header-inner{justify-content:flex-end}
 .site-nav{display:flex;gap:34px;align-items:center;font-size:15px}
 .site-nav a{padding:7px 0;text-decoration:none;border-bottom:1px solid transparent}
 .site-nav a[aria-current=page],.site-nav a:hover{border-color:var(--copper)}
 .kicker{font-family:Arial,sans-serif;font-size:12px;line-height:1.6;letter-spacing:1.8px;color:var(--muted)}
-/* The field balances the introduction; it is deliberately silent. */
-.opening{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,352px);gap:64px;align-items:center;padding-block:56px 64px}
-.opening .kicker{margin-bottom:22px}
+/* The field is an edge-to-edge part of the hero, not an inset object. */
+.opening{display:grid;grid-template-columns:minmax(0,58fr) minmax(0,42fr);align-items:stretch}
+.opening-copy{padding:90px 56px 96px max(56px,calc((100vw - 1080px)/2))}
 .opening h1{font-size:clamp(62px,5vw,72px);line-height:1.04;letter-spacing:-.5px;margin-bottom:24px}
 .opening-intro{font-size:22px;line-height:1.7;max-width:38ch;text-wrap:balance;color:var(--charcoal);margin-bottom:25px}
 .text-link{display:inline-block;font-size:15px;text-decoration:none;border-bottom:1px solid var(--copper);padding:5px 0}
 .text-link .arrow{display:inline-block;margin-left:14px}
 .primary-link{font-size:16px}
-.opening-field{width:100%;height:350px;background:var(--sage)}
+.opening-field{background:var(--sage)}
 .selected-writing{background:var(--sage-wash);border-top:1px solid var(--line)}
 .selected-inner{display:grid;grid-template-columns:1fr 1.65fr;gap:80px;padding-block:24px 29px;align-items:start}
 .selected-inner h2{font-family:var(--text);font-size:16px;line-height:1.75;padding-top:10px;color:var(--muted)}
@@ -104,24 +103,24 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.05;margin:0;text
 .aldric-note{display:none;position:absolute;right:0;bottom:calc(100% + 4px);padding:5px 10px;background:var(--paper);color:var(--ink);white-space:nowrap;font-size:12px;line-height:1.6;box-shadow:0 0 0 1px var(--line);pointer-events:none}
 .aldric[open]>.aldric-note,.aldric:hover>.aldric-note,.aldric:focus-within>.aldric-note{display:block}
 @media(max-width:1150px){
-.opening{gap:44px;grid-template-columns:minmax(0,1fr) minmax(0,308px)}.opening-field{height:310px}
+.opening-copy{padding-block:76px 82px}
 .opening h1{font-size:64px}.opening-intro{font-size:20px}
 .book-row{grid-template-columns:170px minmax(0,1fr);gap:30px}.row-link{grid-column:2;justify-self:start;margin-top:-10px}
 .published-opening{grid-template-columns:290px minmax(0,1fr);gap:55px}.cover-mount{padding:22px}.book-body{margin-left:345px}.about-layout{gap:55px}.novel-body{margin-left:160px}
 }
 @media(max-width:900px){
-.shell{width:calc(100% - 64px)}.opening{gap:36px;grid-template-columns:minmax(0,1fr) minmax(0,240px);padding-block:50px 56px}.opening h1{font-size:60px}.opening .kicker{font-size:11px;letter-spacing:1.1px}.opening-intro{font-size:19px}
-.opening-field{height:285px}.selected-inner{grid-template-columns:1fr 1.6fr;gap:35px}
+.shell{width:calc(100% - 64px)}.opening-copy{padding:64px 32px 70px}.opening h1{font-size:60px}.opening-intro{font-size:19px}
+.selected-inner{grid-template-columns:1fr 1.6fr;gap:35px}
 .page-heading h1,.book-title h1,.novel-heading h1{font-size:58px}
 .about-layout{grid-template-columns:220px minmax(0,1fr);gap:40px}.published-opening{grid-template-columns:240px minmax(0,1fr);gap:40px}.book-title .book-subtitle{font-size:27px}.book-body{margin-left:280px}.book-actions{gap:12px;margin-top:20px}.novel-body{margin-left:100px}
 }
 @media(max-width:760px){
-.opening{grid-template-columns:1fr;gap:28px;padding-block:38px 36px}.opening h1{font-size:56px;margin-bottom:22px}.opening .kicker{font-size:12px;letter-spacing:1px;margin-bottom:20px}.opening-intro{font-size:20px;max-width:34ch;margin-bottom:20px}.opening-field{height:64px}.footer-inner{grid-template-columns:minmax(0,1fr) auto;gap:8px 24px}.footer-credit{grid-column:1;grid-row:1/3;max-width:34ch}.aldric{grid-column:2;grid-row:2}
+.opening{display:block}.opening-copy{padding:48px 32px 54px}.opening h1{font-size:56px;margin-bottom:22px}.opening-intro{font-size:20px;max-width:34ch;margin-bottom:20px}.opening-field{display:none}.footer-inner{grid-template-columns:minmax(0,1fr) auto;gap:8px 24px}.footer-credit{grid-column:1;grid-row:1/3;max-width:34ch}.aldric{grid-column:2;grid-row:2}
 .selected-inner{grid-template-columns:1fr;gap:8px;padding-block:21px 26px}.selected-inner h2{padding-top:0;font-size:15px}.selected-list a{font-size:23px}
 .published-opening{grid-template-columns:220px minmax(0,1fr);gap:28px}.book-body{margin-left:0;max-width:66ch}.book-title .book-subtitle{font-size:25px}.about-layout{grid-template-columns:190px minmax(0,1fr);gap:30px}.prose{font-size:18px}.novel-body{margin-left:0;max-width:66ch}
 }
 @media(max-width:600px){
-.shell{width:calc(100% - 40px)}body{font-size:16px}.site-header{padding-top:20px}.header-inner{padding-bottom:17px;gap:15px}.monogram{font-size:30px}.wordmark{font-size:24px}.site-nav{gap:21px;font-size:14px;flex-wrap:wrap;row-gap:3px}.site-nav a{padding:7px 0}
+.shell{width:calc(100% - 40px)}body{font-size:16px}.site-header{padding-top:20px}.header-inner{padding-bottom:17px;gap:15px}.opening-copy{padding:44px 20px 48px}.wordmark{font-size:24px}.site-nav{gap:21px;font-size:14px;flex-wrap:wrap;row-gap:3px}.site-nav a{padding:7px 0}
 .opening h1{font-size:clamp(44px,13.5vw,54px)}.opening-intro{font-size:19px;line-height:1.7}.primary-link{font-size:15px}.selected-list span{font-size:12px}
 .footer-inner{padding-block:16px;font-size:12px;gap:4px 20px}.footer-inner nav{gap:22px}.footer-credit{max-width:24ch;line-height:1.8}.footer-place{display:block}
 .page-content{padding-bottom:46px}.page-heading{padding:34px 0 25px}.page-heading h1{font-size:52px}.page-heading .deck{font-size:17px;margin-top:15px}
@@ -131,7 +130,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.05;margin:0;text
 .novel-heading{padding:24px 0 25px}.novel-heading h1{font-size:54px}.novel-heading .book-state{font-size:13px}.novel-tagline{padding:23px 24px 25px}.novel-tagline p{font-size:29px;line-height:1.3}.novel-body{margin-top:30px}.contact-body{padding-top:30px}.journal-row h2{font-size:34px}
 }
 @media(max-width:360px){
-.wordmark{font-size:21px}.site-nav{gap:15px;font-size:13px}.opening .kicker{font-size:11px;letter-spacing:.7px}.selected-list p{gap:12px}.footer-inner nav{gap:18px}.novel-tagline{padding-inline:20px}.novel-tagline p{font-size:28px}
+.wordmark{font-size:21px}.site-nav{gap:15px;font-size:13px}.selected-list p{gap:12px}.footer-inner nav{gap:18px}.novel-tagline{padding-inline:20px}.novel-tagline p{font-size:28px}
 .interior-page .header-inner{align-items:flex-start;flex-direction:column;gap:9px}.interior-page .site-nav{gap:25px;font-size:14px}
 }
-@media print{body{background:white;color:black}.site-nav,.site-footer,.skip-link,.opening-field{display:none}.shell{width:100%}.opening{display:block;padding-block:35px}.selected-writing,.novel-tagline{background:none}.book-body{margin-left:0}.published-opening{grid-template-columns:240px 1fr}}
+@media print{body{background:white;color:black}.site-nav,.site-footer,.skip-link,.opening-field{display:none}.shell{width:100%}.opening{display:block;padding-block:35px}.opening-copy{padding:0}.selected-writing,.novel-tagline{background:none}.book-body{margin-left:0}.published-opening{grid-template-columns:240px 1fr}}

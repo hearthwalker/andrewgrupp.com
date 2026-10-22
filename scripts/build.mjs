@@ -69,7 +69,7 @@ ${social.image ? `<meta property="og:image" content="${origin}/${assetPath(socia
 </head>
 <body class="${home ? 'home-page' : 'interior-page'}">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header shell"><div class="header-inner"><a class="${home ? 'monogram' : 'wordmark'}" href="${href('')}" aria-label="Andrew Grupp — home">${home ? 'AG<span aria-hidden="true">.</span>' : esc(site.name)}</a><nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
+<header class="site-header shell"><div class="header-inner">${home ? '' : `<a class="wordmark" href="${href('')}" aria-label="Andrew Grupp — home">${esc(site.name)}</a>`}<nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main" tabindex="-1">${render(href)}</main>
 <footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${nav.filter(([,label])=>label!=='Home').map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
 </body>
@@ -82,7 +82,7 @@ ${social.image ? `<meta property="og:image" content="${origin}/${assetPath(socia
 }
 
 await page('', 'Andrew Grupp — Poetry, Prose and Literary Fiction', site.introduction, 'Home', href => {
-  return `<section class="opening shell" aria-labelledby="author-name"><div class="opening-copy"><p class="kicker">${esc(site.identity)}</p><h1 id="author-name">${esc(site.name)}</h1><p class="opening-intro">${esc(site.introduction)}</p><a class="text-link primary-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div><div class="opening-field" aria-hidden="true"></div></section>
+  return `<section class="opening" aria-labelledby="author-name"><div class="opening-copy"><h1 id="author-name">${esc(site.name)}</h1><p class="opening-intro">${esc(site.introduction)}</p><a class="text-link primary-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div><div class="opening-field" aria-hidden="true"></div></section>
 <section class="selected-writing" aria-labelledby="selected-title"><div class="shell selected-inner"><h2 id="selected-title">Books</h2><div class="selected-list">${site.books.slice(0,2).map(book=>`<p><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a><span>${esc(book.year ? `Published ${book.year}` : book.status)}</span></p>`).join('')}</div></div></section>`;
 });
 
