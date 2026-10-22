@@ -20,7 +20,7 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `hello@andrewgrupp.com` is reserved in the configuration. After creating and testing the mailbox, set `emailEnabled` to `true`. Until then the site publishes no email address or dead mail link.
-- **Selected writing:** the homepage links the first two books in `books`; the Writing page lists the entire bibliography.
+- **Homepage books:** the homepage links the first two books in `books`; the Writing page lists the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link.
 - **Actual cover:** Ash and Pine's approved front cover is required by the build. Its local image paths, dimensions, alt text, source record, and publication date live with its book entry. See [cover provenance](docs/COVER.md) before replacing it.
@@ -65,7 +65,7 @@ For the future domain, see [the launch guide](docs/LAUNCH.md). Do not add a cust
 
 ## Design and licensing
 
-Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A vertical sage field with a narrow copper edge balances the homepage introduction; on phones it becomes a shallow band. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
+Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A broad, unbordered sage field balances the homepage introduction; on phones it becomes a shallow 64px band. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
 
 A small original inline SVG goat in the footer uses a native disclosure: hover or keyboard focus reveals "Aldric was here."; click, Enter, Space or a touch tap toggles it without JavaScript. Its 44px control encloses a 24px-high illustration.
 

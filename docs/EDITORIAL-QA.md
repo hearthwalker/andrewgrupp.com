@@ -1,3 +1,19 @@
+# Final editorial refinement, v4 - October 21, 2026
+
+Focused changes preserve the v3 name scale, fonts, book descriptions, authentic cover assets and Aldric's original SVG/native disclosure. The homepage introduction is now the author's exact sentence: "People, places, and the complicated business of being alive." This also updates its description and Open Graph metadata through the existing data-driven build.
+
+At 1440px the sage field is 352 by 350px, 33.2% more area than v3; the grid gap drops from 100px to 64px. At 1024px its area grows 34.8%, with the gap dropping from 70px to 44px. The copper right border is removed. The field extends evenly above and below the centered text composition. Phone treatment remains 64px high. The new introduction uses a wider reading measure after the first browser review exposed an unnecessarily fragmented desktop line break.
+
+The band label is Books, with Published 2026 and In progress statuses. The shared footer consolidates copyright and location as "Copyright 2026 Andrew Grupp - Nebraska, United States" (rendered with the copyright symbol and middle dot). Desktop height falls from 138.75px to 84px; phone height falls from 127px to 117px while retaining comfortable navigation and the 44px goat control.
+
+Local evidence is in `artifacts/refinement-v4/`: before/after homepage records at 1440, 1024, 390 and 320px, paired comparison images, interior-page spot checks at 1440 and 320px, metrics and live deployment evidence. Full-page images assemble settled browser viewport captures at measured offsets. No overflow or unloaded images occurred in the final checks. The introduction uses two lines on desktop and 390px, and three at 320px without forced breaks. Book titles and statuses remain aligned without cards.
+
+Art-direction critique: the wider field now has enough weight to balance the author introduction, and the shorter gap makes its relationship to the text clearer. Removing the thin edge makes it read as a solid part of the layout. The shorter, more specific introduction and consolidated footer remove the two weakest pieces of v3's copy hierarchy. The name has not grown. At 320px prose necessarily occupies more lines, but the field remains shallow and the footer groups rather than scatters its information. No new decoration earns a place here.
+
+Build/check, content-preservation, focus/disclosure and live verification results are recorded in the local `RESULTS.md` handoff. The footer now intentionally repeats the author's name in small copyright text; the name-count check applies to main content, preserving one prominent homepage name.
+
+---
+
 # Editorial review, round three - October 21, 2026
 
 The static Node build, central JSON content, self-hosted fonts, metadata, GitHub Pages workflow and project-path URLs remain in place. No client JavaScript, production dependencies, tracking, DNS changes or mailbox activation were introduced.

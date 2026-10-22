@@ -64,12 +64,12 @@ if(content.shareImage){try{await stat(path.join(root,content.shareImage));checke
 if(!content.journal.some(e=>e.published===true) && files.some(f=>path.relative(root,f).startsWith('journal'+path.sep))) errors.push('Empty journal must not be published');
 if(!content.emailEnabled && files.some(f=>path.relative(root,f).startsWith('contact'+path.sep)))errors.push('Inactive Contact page must not be generated');
 const home=await readFile(path.join(root,'index.html'),'utf8');
-const homeText=home.split('<body')[1].replace(/<[^>]*>/g,' ');
+const homeText=home.split('<main id="main" tabindex="-1">')[1].split('</main>')[0].replace(/<[^>]*>/g,' ');
 if(/<img\b|<figure\b|photography\//.test(home))errors.push('Homepage must not render or preload photography');
 if(!home.includes('<div class="opening-field" aria-hidden="true"></div>'))errors.push('Homepage color field missing');
 if(/opening-art|white-space:nowrap[^}]*opening/.test(css))errors.push('Obsolete photograph styling or forced hero nowrap');
 if(content.biography.some(p=>p.includes('landscape photographs')))errors.push('Biography must not claim landscape photographs absent from the site');
-if((homeText.match(/Andrew Grupp/g)||[]).length!==1)errors.push('Homepage must display the full author name exactly once');
+if((homeText.match(/Andrew Grupp/g)||[]).length!==1)errors.push('Homepage main content must display the full author name exactly once');
 if((homeText.match(/Poetry, prose and literary fiction/g)||[]).length!==1)errors.push('Homepage genre descriptor must occur exactly once');
 const ash=content.books.find(b=>b.slug==='ash-and-pine');
 const ashHtml=await readFile(path.join(root,'writing/ash-and-pine/index.html'),'utf8');
