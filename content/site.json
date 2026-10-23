@@ -15,6 +15,12 @@
   "photographBase": "assets/photography/andrew-grupp-monochrome",
   "photographWidths": [480, 800],
   "photographAlt": "Black-and-white portrait of Andrew Grupp wearing glasses and a knit sweater.",
+  "aboutPhotograph": "assets/photography/andrew-grupp-portrait-800.jpg",
+  "aboutPhotographBase": "assets/photography/andrew-grupp-portrait",
+  "aboutPhotographWidths": [480, 800, 1024],
+  "aboutPhotographWidth": 800,
+  "aboutPhotographHeight": 1200,
+  "aboutPhotographAlt": "Portrait of Andrew Grupp, smiling slightly, with a salt-and-pepper beard and a gray henley shirt, against a dark background.",
   "landscapes": {
     "writing": {
       "image": "assets/photography/rocky-shore-1080.jpg",
