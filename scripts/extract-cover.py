@@ -19,8 +19,9 @@ assert abs(width - 827.1) < 0.1 and abs(height - 630) < 0.1, "Unexpected wrap di
 front = page.render(scale=3, crop=(422.1, 9, 9, 9)).to_pil().convert("RGB")
 out = Path("public/assets/books")
 out.mkdir(parents=True, exist_ok=True)
-for target_width in (360, 720):
+for target_width in (360, 480, 720, 960):
     target_height = round(target_width * 8.5 / 5.5)
     image = front.resize((target_width, target_height), Image.Resampling.LANCZOS)
     image.save(out / f"ash-and-pine-approved-{target_width}.jpg", quality=92, optimize=True)
-    print(f"Approved front: {target_width} x {target_height}")
+    image.save(out / f"ash-and-pine-approved-{target_width}.webp", quality=86, method=6)
+    print(f"Approved front: {target_width} x {target_height} (JPEG and WebP)")

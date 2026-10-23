@@ -1,4 +1,22 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Andrew Grupp social card</title><style>
-@font-face{font-family:Cormorant;src:url('/assets/fonts/cormorant-garamond.ttf')}@font-face{font-family:Source;src:url('/assets/fonts/source-serif.ttf')}
-*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#f2ede3;color:#262922}.card{height:100%;padding:76px 80px;position:relative}.kicker{font:14px Arial,sans-serif;letter-spacing:2px;margin:0 0 48px}h1{font:400 125px/1 Cormorant,Georgia,serif;letter-spacing:-3px;margin:0 0 30px}.line{width:58px;height:2px;background:#9b7658}.sage{position:absolute;right:0;top:0;width:65px;height:480px;background:#777c6b}.footer{position:absolute;bottom:0;left:0;right:0;background:#262922;color:#f2ede3;height:112px;padding:40px 80px;font:22px Source,Georgia,serif}
-</style><div class="card"><p class="kicker">Poetry, prose and literary fiction</p><h1>Andrew Grupp</h1><div class="line"></div><div class="sage"></div><div class="footer">Nebraska</div></div></html>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Andrew Grupp social cards</title><style>
+@font-face{font-family:Cormorant;src:url('/assets/fonts/cormorant-garamond-500.woff2') format('woff2');font-weight:500}
+@font-face{font-family:Source;src:url('/assets/fonts/source-serif-4.woff2') format('woff2');font-weight:400 600}
+@font-face{font-family:Source;src:url('/assets/fonts/source-serif-4-italic.woff2') format('woff2');font-style:italic}
+*{box-sizing:border-box}html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+.card{width:1200px;height:630px;position:relative;display:none}
+:target,.card:first-of-type:not(:has(~ :target)){display:flex}
+.label{font:400 26px Source,Georgia,serif;font-variant-caps:all-small-caps;letter-spacing:3px;margin:0 0 26px}
+h1{font:500 112px/1 Cormorant,Georgia,serif;margin:0}
+.sub{font:italic 30px/1.4 Source,Georgia,serif;margin:20px 0 0}
+.rule{width:56px;height:2px;background:#9c4a2b;margin:44px 0 0}
+#site{background:#f2ede3;color:#2a2723;align-items:center;padding:0 96px;gap:80px}
+#site .text{flex:1}#site .sub{color:#5e5850}
+#site img{width:300px;height:464px;box-shadow:0 2px 4px rgba(42,39,35,.2),0 30px 60px -28px rgba(42,39,35,.6)}
+#housefall{background:#2a2723;color:#efe9dd;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 120px}
+#housefall .label{color:#b9b1a4}#housefall .rule{margin:40px auto}
+#housefall p.tag{font:500 50px/1.25 Cormorant,Georgia,serif;margin:0}
+</style>
+<!-- Render at 1200 x 630: /scripts/share-card.html#site and #housefall. -->
+<div class="card" id="site"><div class="text"><p class="label">Andrew Grupp</p><h1>Ash and Pine</h1><p class="sub">A Collection of Prose and Poetry</p><div class="rule"></div></div><img src="/assets/books/ash-and-pine-approved-720.jpg" alt=""></div>
+<div class="card" id="housefall"><p class="label">Andrew Grupp · A novel in progress</p><h1>Housefall</h1><div class="rule"></div><p class="tag">The hall still stands.<br>Everything that made it a home is gone.</p></div>
+</html>

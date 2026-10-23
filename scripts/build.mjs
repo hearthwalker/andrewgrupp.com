@@ -9,6 +9,8 @@ const site = JSON.parse(await readFile(path.join(root, 'content/site.json'), 'ut
 const styleVersion = createHash('sha256').update(await readFile(path.join(root,'public/assets/style.css'))).digest('hex').slice(0,12);
 const origin = (process.env.SITE_URL || 'https://hearthwalker.github.io/andrewgrupp.com').replace(/\/$/, '');
 if (!/^https:\/\//.test(origin)) throw new Error('SITE_URL must be an absolute HTTPS URL.');
+// "/andrewgrupp.com/" on the project site, "/" at a domain root. Only the 404 page needs it.
+const basePath = new URL(`${origin}/`).pathname;
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeUrl = value => { if (!/^https:\/\//.test(value)) throw new Error('External links must use HTTPS.'); return esc(value); };
 const assetPath = value => { if (!/^assets\/[a-zA-Z0-9/_.-]+$/.test(value) || value.includes('..')) throw new Error('Assets must be inside public/assets.'); return value; };
@@ -21,9 +23,15 @@ for (const collection of [site.books, entries]) {
 if (site.email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(site.email)) throw new Error('Invalid correspondence email.');
 if (site.photograph && !site.photographAlt) throw new Error('Author photograph requires alt text.');
 for (const book of site.books) {
-  if (book.cover && (!book.coverAlt || !book.coverWidth || !book.coverHeight)) throw new Error('Book covers require alt text and dimensions.');
+  if (book.cover && (!book.coverAlt || !book.coverWidth || !book.coverHeight || !book.coverBase || !book.coverWidths?.length)) throw new Error('Book covers require alt text, dimensions and responsive sizes.');
   if (book.slug === 'ash-and-pine' && (!book.cover || !book.coverSource)) throw new Error('Ash and Pine requires its authentic approved front cover and source record.');
+  for (const excerpt of book.excerpts || []) if (!excerpt.title || !Array.isArray(excerpt.lines) || !excerpt.lines.length) throw new Error('Excerpts require a title and lines.');
+  for (const item of book.praise || []) if (!item.quote || !item.source) throw new Error('Praise requires a quote and its source.');
+  if (book.playlistUrl && !/^https:\/\/open\.spotify\.com\/playlist\/[A-Za-z0-9]+$/.test(book.playlistUrl)) throw new Error('Playlist must be an open.spotify.com playlist URL.');
 }
+const featured = site.books.find(book => book.year && book.cover);
+const novel = site.books.find(book => !book.year);
+if (!featured || !novel) throw new Error('Home needs one published book with a cover and one book in progress.');
 await rm(out, {recursive:true, force:true});
 await mkdir(out, {recursive:true});
 await cp(path.join(root,'public'), out, {recursive:true});
@@ -33,22 +41,50 @@ const aldric = `<details class="aldric"><summary aria-label="Aldric, a small goa
 const paragraphs = values => values.map(p => `<p>${esc(p)}</p>`).join('\n');
 const dateLabel = date => { const parsed = new Date(`${date}T12:00:00Z`); if (Number.isNaN(parsed.valueOf()) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Invalid journal date.'); return new Intl.DateTimeFormat('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'}).format(parsed); };
 const pageHeading = (title, deck='') => `<header class="page-heading"><h1>${esc(title)}</h1>${deck ? `<p class="deck">${esc(deck)}</p>` : ''}</header>`;
-const bookActions = book => `<div class="book-actions">${book.purchaseUrl ? `<a class="text-link" href="${safeUrl(book.purchaseUrl)}">Find the book ${arrow}</a>` : ''}${book.playlistUrl ? `<a class="text-link" href="${safeUrl(book.playlistUrl)}">Companion playlist on Spotify ${arrow}</a>` : ''}</div>`;
+const bookUrl = book => `writing/${book.slug}/`;
+// Display lines break between sentences rather than wherever the measure runs out.
+const sentences = text => text.match(/[^.]+\.\s*/g).map(s => `<span>${esc(s.trim())}</span>`).join(' ');
+
+// WebP first, JPEG fallback. Width and height reserve the space before load.
+const picture = (href, {base, widths, fallback, width, height, alt, sizes, eager=false}) => {
+  const set = ext => widths.map(w => `${href(assetPath(`${base}-${w}.${ext}`))} ${w}w`).join(', ');
+  return `<picture><source type="image/webp" srcset="${set('webp')}" sizes="${sizes}"><img src="${href(assetPath(fallback))}" srcset="${set('jpg')}" sizes="${sizes}" alt="${esc(alt)}" width="${width}" height="${height}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
+};
+const coverPicture = (href, book, sizes, eager) => picture(href, {base:book.coverBase, widths:book.coverWidths, fallback:book.cover, width:book.coverWidth, height:book.coverHeight, alt:book.coverAlt, sizes, eager});
+const portraitPicture = (href, sizes, eager) => picture(href, {base:site.photographBase, widths:site.photographWidths, fallback:site.photograph, width:800, height:800, alt:site.photographAlt, sizes, eager});
+const actions = (book, playlistHref=book.playlistUrl) => `<div class="actions">${book.purchaseUrl ? `<a class="button" href="${safeUrl(book.purchaseUrl)}">${esc(book.purchaseLabel || 'Buy the book')}</a>` : ''}${book.playlistUrl ? `<a class="text-link" href="${playlistHref.startsWith('#') ? playlistHref : safeUrl(playlistHref)}">Listen to the playlist ${arrow}</a>` : ''}</div>`;
+// Each line is its own block so it never reflows into its neighbor; the <br>s keep
+// the breaks in reader modes and copied text.
+const verse = excerpt => `<figure class="verse"><blockquote class="verse-lines">${excerpt.lines.map(line => `<span class="verse-line">${esc(line)}</span><br>`).join('\n')}</blockquote><figcaption>-- from “${esc(excerpt.title)}”</figcaption></figure>`;
+const excerptBand = (book, id) => (book.excerpts || []).length ? `<section class="band excerpt-band" aria-labelledby="${id}"><div class="shell"><h2 class="label" id="${id}">From the book</h2>${book.excerpts.map(verse).join('')}</div></section>` : '';
+
+const personId = `${origin}/#author`;
+const person = {'@type':'Person','@id':personId,name:site.name,url:`${origin}/`,jobTitle:'Writer',description:site.biography.join(' '),homeLocation:{'@type':'Place',name:'Nebraska, United States'},...(site.photograph ? {image:`${origin}/${assetPath(site.photograph)}`} : {})};
+const bookData = book => {
+  const published = Boolean(book.year);
+  return {'@type':'Book','@id':`${origin}/${bookUrl(book)}#book`,name:`${book.title}${published ? `: ${book.subtitle}` : ''}`,author:{'@type':'Person','@id':personId,name:site.name},genre:book.category,inLanguage:'en',url:`${origin}/${bookUrl(book)}`,description:book.description[0],...(published ? {datePublished:book.publicationDate || book.year} : {creativeWorkStatus:book.status}),...(book.cover ? {image:`${origin}/${assetPath(book.cover)}`} : {}),...(book.purchaseUrl ? {sameAs:[book.purchaseUrl]} : {})};
+};
+const graph = (...nodes) => ({'@context':'https://schema.org','@graph':nodes});
+const website = {'@type':'WebSite','@id':`${origin}/#website`,name:site.name,url:`${origin}/`,author:{'@id':personId}};
+const defaultShare = {image:site.shareImage,width:1200,height:630,alt:site.shareImageAlt};
 
 async function page(route, title, description, active, render, {type='website', schema=null, index=true, share=null}={}) {
-  const prefix = '../'.repeat(route.split('/').filter(Boolean).length) || './';
+  // Relative links work under the project path and at a domain root. The 404 page is
+  // served at any depth, so it alone uses the absolute base path.
+  const prefix = route === '404.html' ? basePath : ('../'.repeat(route.split('/').filter(Boolean).length) || './');
   const href = target => `${prefix}${target}`;
   const canonical = `${origin}/${route}`;
   const home = route === '';
-  const nav = [['','Home'],['writing/','Writing'],['about/','About'], ...(entries.length ? [['journal/','Journal']] : []), ...(contactEnabled ? [['contact/','Contact']] : [])];
-  const data = schema || {'@context':'https://schema.org','@type':'WebSite',name:site.name,url:`${origin}/`,author:{'@type':'Person',name:site.name}};
-  const social = share || {image:site.shareImage,width:1200,height:630,alt:'Andrew Grupp. Poetry, prose and literary fiction.'};
+  const nav = [['writing/','Writing'],['about/','About'], ...(entries.length ? [['journal/','Journal']] : []), ...(contactEnabled ? [['contact/','Contact']] : [])];
+  const data = schema || graph(website, person);
+  const social = share || defaultShare;
   const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#F2EDE3">
+<meta name="theme-color" content="#F2EDE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#211E1B" media="(prefers-color-scheme: dark)">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <meta name="author" content="Andrew Grupp">
@@ -60,55 +96,71 @@ ${index ? '' : '<meta name="robots" content="noindex">'}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
-${social.image ? `<meta property="og:image" content="${origin}/${assetPath(social.image)}"><meta property="og:image:width" content="${social.width}"><meta property="og:image:height" content="${social.height}"><meta property="og:image:alt" content="${esc(social.alt)}">` : ''}
+<meta property="og:image" content="${origin}/${assetPath(social.image)}"><meta property="og:image:width" content="${social.width}"><meta property="og:image:height" content="${social.height}"><meta property="og:image:alt" content="${esc(social.alt)}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="${href('assets/favicon.svg')}">
-<link rel="preload" href="${href('assets/fonts/cormorant-garamond.ttf')}" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="${href('assets/fonts/cormorant-garamond-500.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${href('assets/style.css')}?v=${styleVersion}">
 <script type="application/ld+json">${JSON.stringify(data).replace(/</g,'\\u003c')}</script>
 </head>
 <body class="${home ? 'home-page' : 'interior-page'}">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header shell"><div class="header-inner">${home ? '' : `<a class="wordmark" href="${href('')}" aria-label="Andrew Grupp — home">${esc(site.name)}</a>`}<nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
+<header class="site-header"><div class="shell"><a class="wordmark" href="${href('')}"${home ? ' aria-current="page"' : ''}>${esc(site.name)}</a><nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main" tabindex="-1">${render(href)}</main>
-<footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${nav.filter(([,label])=>label!=='Home').map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
+<footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${nav.map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
 </body>
 </html>`;
   const filename = route === '404.html' ? '404.html' : `${route}index.html`;
-  const finalHtml = route === '404.html' ? html.replaceAll('../', `${new URL(origin).pathname.replace(/\/$/,'')}/`) : html;
   await mkdir(path.dirname(path.join(out,filename)), {recursive:true});
-  await writeFile(path.join(out,filename),finalHtml);
+  await writeFile(path.join(out,filename),html);
   if (index) pages.push(route);
 }
 
-await page('', 'Andrew Grupp — Poetry, Prose and Literary Fiction', site.introduction, 'Home', href => {
-  return `<section class="opening" aria-labelledby="author-name"><div class="opening-copy"><h1 id="author-name">${esc(site.name)}</h1><p class="opening-intro">${esc(site.introduction)}</p><a class="text-link primary-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div><div class="opening-field" aria-hidden="true"></div></section>
-<section class="selected-writing" aria-labelledby="selected-title"><div class="shell selected-inner"><h2 id="selected-title">Books</h2><div class="selected-list">${site.books.slice(0,2).map(book=>`<p><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a><span>${esc(book.year ? `Published ${book.year}` : book.status)}</span></p>`).join('')}</div></div></section>`;
-});
+await page('', `${site.name} · Poetry, Prose and Literary Fiction`, `${featured.title}: ${featured.subtitle}, by ${site.name}. ${featured.heroLine}`, 'Home', href => `<section class="hero" aria-labelledby="hero-title"><div class="shell hero-inner">
+<a class="hero-cover cover" href="${href(bookUrl(featured))}">${coverPicture(href, featured, '(max-width: 760px) min(60vw, 250px), 400px', true)}</a>
+<div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${esc(featured.heroLine)}</p>${actions(featured)}</div>
+</div></section>
+<section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>
+<section class="home-section home-novel" aria-labelledby="novel-title"><div class="shell home-novel-inner"><div class="home-novel-meta"><p class="label">${esc(novel.status)}</p><h2 id="novel-title"><a href="${href(bookUrl(novel))}">${esc(novel.title)}</a></h2><p class="book-subtitle">${esc(novel.subtitle)}</p></div>
+<div class="home-novel-copy"><p class="novel-line">${sentences(novel.tagline)}</p>${paragraphs(novel.description.slice(1,3))}<a class="text-link" href="${href(bookUrl(novel))}">About the novel ${arrow}</a></div></div></section>
+<section class="home-section home-about" aria-labelledby="about-title"><div class="shell home-about-inner"><div class="home-portrait">${portraitPicture(href, '(max-width: 760px) min(56vw, 220px), 260px', false)}</div>
+<div class="home-about-copy"><p class="label">About</p><h2 id="about-title">${esc(site.name)}</h2><p class="lede">${esc(site.introduction)}</p><p>${esc(site.biography[1])}</p><a class="text-link" href="${href('about/')}">More about Andrew ${arrow}</a></div></div></section>`, {schema:graph(website, person, bookData(featured))});
 
-await page('writing/', 'Writing — Andrew Grupp', 'Published work and literary fiction in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `<div class="shell page-content">${pageHeading('Writing','Books and works in progress.')}<div class="bibliography">${site.books.map(book => `<article class="book-row"><p class="book-state">${esc(book.status)}</p><div><h2><a href="${href(`writing/${book.slug}/`)}">${esc(book.title)}</a></h2><p class="book-subtitle">${esc(book.subtitle)}</p></div><a class="text-link row-link" href="${href(`writing/${book.slug}/`)}" aria-label="Read about ${esc(book.title)}">Read more ${arrow}</a></article>`).join('')}</div></div>`);
+await page('writing/', `Writing · ${site.name}`, 'Published work and literary fiction in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `<div class="shell page-content">${pageHeading('Writing','Books and works in progress.')}<ul class="shelf" role="list">${site.books.map(book => `<li><a class="shelf-link" href="${href(bookUrl(book))}"><div class="shelf-stand">${book.cover ? `<div class="cover">${coverPicture(href, book, '(max-width: 600px) calc(50vw - 40px), 250px', true)}</div>` : `<div class="type-cover" aria-hidden="true"><span><span class="type-cover-title">${esc(book.title)}</span><span class="type-cover-rule"></span></span><span class="type-cover-status">${esc(book.status)}</span></div>`}</div><div class="shelf-caption"><p class="label">${esc(book.status)}</p><h2 class="shelf-title">${esc(book.title)}</h2><p class="shelf-subtitle">${esc(book.subtitle)}</p></div></a></li>`).join('')}</ul></div>`);
 
-await page('about/', 'About — Andrew Grupp', 'Andrew Grupp is the author of Ash and Pine and is writing Housefall, a literary historical novel. He lives in Nebraska.', 'About', href => `<div class="shell page-content">${pageHeading('About')}<div class="about-layout">${site.photograph ? `<img class="portrait" src="${href(assetPath(site.photograph))}" srcset="${href(assetPath(site.photographSmall))} 480w, ${href(assetPath(site.photograph))} 800w" sizes="(max-width: 600px) 220px, 280px" alt="${esc(site.photographAlt)}" width="800" height="800" decoding="async">` : ''}<div class="prose">${paragraphs(site.biography)}<a class="text-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div></div></div>`, {schema:{'@context':'https://schema.org','@type':'Person',name:site.name,url:`${origin}/about/`,description:site.biography.join(' '),jobTitle:'Writer',...(site.photograph ? {image:`${origin}/${assetPath(site.photograph)}`} : {})}});
+await page('about/', `About · ${site.name}`, 'Andrew Grupp is the author of Ash and Pine and is writing Housefall, a literary historical novel. He lives in Nebraska.', 'About', href => `<div class="shell page-content"><div class="about-layout">${site.photograph ? `<figure class="portrait">${portraitPicture(href, '(max-width: 760px) min(calc(100vw - 48px), 360px), 440px', true)}</figure>` : ''}<div class="about-text"><p class="label">About</p><h1>${esc(site.name)}</h1><p class="lede">${esc(site.introduction)}</p><div class="prose">${paragraphs(site.biography)}</div><a class="text-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div></div></div>`, {type:'profile', schema:graph({'@type':'ProfilePage',url:`${origin}/about/`,mainEntity:{'@id':personId}}, person), share:site.photograph ? {image:site.photograph,width:800,height:800,alt:site.photographAlt} : null});
 
 for (const book of site.books) {
   const other = site.books.find(b => b.slug !== book.slug);
   const published = Boolean(book.year);
   const description = published ? `${book.title}: ${book.subtitle} by Andrew Grupp. ${book.status}.` : `${book.title}, a literary historical novel in progress by Andrew Grupp. ${book.tagline}`;
-  const bookSchema = {'@context':'https://schema.org','@type':'Book',name:`${book.title}${published ? `: ${book.subtitle}` : ''}`,author:{'@type':'Person',name:site.name},genre:book.category,inLanguage:'en',url:`${origin}/writing/${book.slug}/`,...(published ? {datePublished:book.publicationDate || book.year} : {}),...(book.cover ? {image:`${origin}/${assetPath(book.cover)}`} : {})};
-  const social = book.cover ? {image:book.cover,width:book.coverWidth,height:book.coverHeight,alt:book.coverAlt} : null;
-  await page(`writing/${book.slug}/`, `${book.title} — Andrew Grupp`, description, 'Writing', href => `<article class="shell book-detail"><a class="back-link" href="${href('writing/')}">← All writing</a>${published ? `<div class="published-opening"><div class="cover-column"><div class="cover-mount"><img class="book-cover" src="${href(assetPath(book.cover))}" srcset="${href(assetPath(book.coverSmall))} 360w, ${href(assetPath(book.cover))} ${book.coverWidth}w" sizes="(max-width: 600px) 240px, 280px" alt="${esc(book.coverAlt)}" width="${book.coverWidth}" height="${book.coverHeight}" fetchpriority="high" decoding="async"></div></div><header class="book-title"><p class="book-state">${esc(book.status)}</p><h1>${esc(book.title)}</h1><p class="book-subtitle">${esc(book.subtitle)}</p>${bookActions(book)}</header></div><div class="book-body prose">${paragraphs(book.description)}</div>` : `<header class="novel-heading"><p class="book-state">${esc(book.category)} <span aria-hidden="true">·</span> ${esc(book.status)}</p><h1>${esc(book.title)}</h1></header><div class="novel-tagline"><p>${esc(book.tagline)}</p></div><div class="novel-body prose">${paragraphs(book.description)}</div>`}${other ? `<nav class="book-bottom" aria-label="More writing"><span>More writing</span><a href="${href(`writing/${other.slug}/`)}">${esc(other.title)} ${arrow}</a></nav>` : ''}</article>`, {schema:bookSchema,share:social});
+  const social = book.cover ? {image:book.cover,width:book.coverWidth,height:book.coverHeight,alt:book.coverAlt} : book.shareImage ? {image:book.shareImage,width:1200,height:630,alt:book.shareImageAlt} : null;
+  const praise = (book.praise || []).length ? `<section class="shell praise" aria-labelledby="praise-title"><div class="book-reading"><div><h2 class="label" id="praise-title">Praise</h2>${book.praise.map(item => `<figure><blockquote><p>${esc(item.quote)}</p></blockquote><figcaption>-- ${esc(item.source)}</figcaption></figure>`).join('')}</div></div></section>` : '';
+  const playlist = book.playlistUrl ? `<section class="shell playlist" id="playlist" aria-labelledby="playlist-title"><div class="book-reading"><div><h2 class="label" id="playlist-title">Companion playlist</h2><iframe class="spotify" title="${esc(book.title)} companion playlist on Spotify" src="${safeUrl(book.playlistUrl.replace('open.spotify.com/playlist/','open.spotify.com/embed/playlist/'))}?utm_source=generator" width="100%" height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div></div></section>` : '';
+  await page(bookUrl(book), `${book.title} · ${site.name}`, description, 'Writing', href => {
+    const more = other ? `<nav class="shell book-bottom" aria-label="More writing"><span>More writing</span><a href="${href(bookUrl(other))}">${esc(other.title)} ${arrow}</a></nav>` : '';
+    if (published) return `<article aria-labelledby="book-title"><div class="shell"><a class="back-link" href="${href('writing/')}">← All writing</a>
+<div class="book-hero"><div class="book-cover-col"><div class="cover">${coverPicture(href, book, '(max-width: 760px) min(60vw, 250px), 360px', true)}</div></div><div class="book-hero-copy"><header><p class="label">${esc(book.status)}</p><h1 id="book-title">${esc(book.title)}</h1><p class="hero-subtitle">${esc(book.subtitle)}</p>${actions(book, '#playlist')}</header>
+<div class="prose book-description">${paragraphs(book.description)}</div></div></div></div>
+${excerptBand(book, 'excerpts-title')}${playlist}${praise}${more}</article>`;
+    const tagline = sentences(book.tagline);
+    return `<article aria-labelledby="book-title"><div class="shell"><a class="back-link" href="${href('writing/')}">← All writing</a>
+<header class="novel-heading"><p class="status">${esc(book.status)}</p><h1 id="book-title">${esc(book.title)}</h1><p class="book-subtitle">${esc(book.subtitle)}</p></header></div>
+<div class="night-band"><div class="shell"><p class="novel-tagline">${tagline}</p></div></div>
+<div class="shell"><div class="prose novel-body">${paragraphs(book.description)}</div></div>
+${excerptBand(book, 'excerpts-title')}${more}</article>`;
+  }, {schema:graph(bookData(book), person), share:social, type:published ? 'book' : 'website'});
 }
 
-if (contactEnabled) await page('contact/', 'Contact — Andrew Grupp', 'Professional correspondence with Andrew Grupp.', 'Contact', () => `<div class="shell page-content">${pageHeading('Correspondence')}<div class="contact-body prose"><p>For professional correspondence, please write to<br><a href="mailto:${esc(site.email)}">${esc(site.email)}</a>.</p></div></div>`);
+if (contactEnabled) await page('contact/', `Contact · ${site.name}`, 'Professional correspondence with Andrew Grupp.', 'Contact', () => `<div class="shell page-content">${pageHeading('Correspondence')}<div class="contact-body prose"><p>For professional correspondence, please write to<br><a href="mailto:${esc(site.email)}">${esc(site.email)}</a>.</p></div></div>`);
 
 if (entries.length) {
-  await page('journal/', 'Journal — Andrew Grupp', 'Essays, literary reflections, and excerpts by Andrew Grupp.', 'Journal', href => `<div class="shell page-content">${pageHeading('Journal')}${entries.map(entry => `<article class="journal-row"><time class="kicker" datetime="${esc(entry.date)}">${dateLabel(entry.date)}</time><h2><a href="${href(`journal/${entry.slug}/`)}">${esc(entry.title)}</a></h2><p>${esc(entry.summary)}</p></article>`).join('')}</div>`);
-  for (const entry of entries) await page(`journal/${entry.slug}/`, `${entry.title} — Andrew Grupp`, entry.summary, 'Journal', href => `<article class="shell page-content"><a class="back-link" href="${href('journal/')}">← Journal</a>${pageHeading(entry.title)}<time class="kicker" datetime="${esc(entry.date)}">${dateLabel(entry.date)}</time><div class="journal-entry prose">${paragraphs(entry.paragraphs)}</div></article>`, {type:'article'});
+  await page('journal/', `Journal · ${site.name}`, 'Essays, literary reflections, and excerpts by Andrew Grupp.', 'Journal', href => `<div class="shell page-content">${pageHeading('Journal')}${entries.map(entry => `<article class="journal-row"><time class="label" datetime="${esc(entry.date)}">${dateLabel(entry.date)}</time><h2><a href="${href(`journal/${entry.slug}/`)}">${esc(entry.title)}</a></h2><p>${esc(entry.summary)}</p></article>`).join('')}</div>`);
+  for (const entry of entries) await page(`journal/${entry.slug}/`, `${entry.title} · ${site.name}`, entry.summary, 'Journal', href => `<article class="shell page-content"><a class="back-link" href="${href('journal/')}">← Journal</a>${pageHeading(entry.title)}<time class="label" datetime="${esc(entry.date)}">${dateLabel(entry.date)}</time><div class="journal-entry prose">${paragraphs(entry.paragraphs)}</div></article>`, {type:'article'});
 }
 
-await page('404.html','Page not found — Andrew Grupp','This page could not be found. Return to the writing.','',href => `<div class="shell page-content not-found">${pageHeading('Page not found')}<p>This page is no longer here.</p><a class="text-link" href="${href('')}">Return home ${arrow}</a></div>`, {index:false});
+await page('404.html',`Page not found · ${site.name}`,'This page could not be found. Return to the writing.','',href => `<div class="shell page-content not-found">${pageHeading('Page not found')}<p>This page is no longer here.</p><a class="text-link" href="${href('')}">Return home ${arrow}</a></div>`, {index:false});
 await writeFile(path.join(out,'.nojekyll'),'');
 await writeFile(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
 await writeFile(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(route=>`<url><loc>${origin}/${route}</loc></url>`).join('')}</urlset>\n`);
 console.log(`Built ${pages.length} pages + 404 at ${origin}. Contact: ${contactEnabled ? 'enabled' : 'hidden'}. Journal: ${entries.length} published entries.`);
-
