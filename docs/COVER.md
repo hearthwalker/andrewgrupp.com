@@ -10,7 +10,7 @@ Extraction coordinates, measured in PDF points from the page origin:
 - Result: 396 × 612 points, or exactly 5.5 × 8.5 inches.
 - The 17.1-point spine, back cover, and 9-point outer bleed are excluded.
 
-`scripts/extract-cover.py` renders that exact rectangle, then creates metadata-free JPEG variants at 360 × 556 and 720 × 1113 pixels. Reproduction requires the optional local authoring dependencies pypdfium2 and Pillow; the normal site build needs neither Python nor these packages.
+`scripts/extract-cover.py` renders that exact rectangle, then creates metadata-free JPEG and WebP variants at 360 × 556, 480 × 742, 720 × 1113 and 960 × 1484 pixels. Reproduction requires the optional local authoring dependencies pypdfium2 and Pillow; the normal site build needs neither Python nor these packages.
 
 ```powershell
 python scripts/extract-cover.py Ash_and_Pine_COVER_FINAL.pdf
@@ -18,7 +18,7 @@ python scripts/extract-cover.py Ash_and_Pine_COVER_FINAL.pdf
 
 Published files:
 
-- `public/assets/books/ash-and-pine-approved-360.jpg`
-- `public/assets/books/ash-and-pine-approved-720.jpg`
+- `public/assets/books/ash-and-pine-approved-{360,480,720,960}.jpg`
+- `public/assets/books/ash-and-pine-approved-{360,480,720,960}.webp`
 
-The book page displays the full image with `object-fit: contain`, intrinsic dimensions, responsive sources, descriptive alt text, and eager loading. It is fully visible above the fold at the tested desktop and laptop widths. Phone layouts put the title and links first, followed by the complete front cover before the description. The cover is also used for that book's Open Graph image.
+The homepage hero, Writing shelf and book page display the full image uncropped, with intrinsic dimensions, WebP sources and JPEG fallbacks, descriptive alt text, and high fetch priority. Phone layouts show the cover first, then the title and links. The 720px JPEG is also that book's Open Graph image.
