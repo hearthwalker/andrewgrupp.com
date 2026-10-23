@@ -20,17 +20,21 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `hello@andrewgrupp.com` is reserved in the configuration. After creating and testing the mailbox, set `emailEnabled` to `true`. Until then the site publishes no email address or dead mail link.
-- **Homepage books:** the homepage links the first two books in `books`; the Writing page lists the entire bibliography.
+- **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, purchase button, playlist link and first excerpt. The `invitation` line closes the excerpt band. Below it are the book in progress (Housefall) and an about teaser using `introduction`, the second `biography` paragraph and the portrait. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
-- **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link.
-- **Actual cover:** Ash and Pine's approved front cover is required by the build. Its local image paths, dimensions, alt text, source record, and publication date live with its book entry. See [cover provenance](docs/COVER.md) before replacing it.
-- **Author photograph:** add an approved image, set `photograph` and `photographAlt`. It appears only on About. Strip private EXIF/location metadata before adding it.
-- **Landscapes:** source photography and public derivatives are retained for future editorial use. The homepage renders a flat sage color field; it does not render or request a photograph. About is the only page with an author portrait.
-- **Social card:** `shareImage` points to the site’s typographic card, not a portrait or a book cover.
+- **Excerpts:** each book's `excerpts` is a list of `{ "title": "...", "lines": ["...", "..."] }`. Every string in `lines` is one line of verse, kept whole; long lines turn over with a hanging indent on phones. An empty list (Housefall today) renders nothing.
+- **Praise:** each book's `praise` is a list of `{ "quote": "...", "source": "..." }`. The block appears only when the list has entries. Add real, attributable praise only.
+- **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link. `purchaseLabel` is the button text. A Spotify playlist URL also produces the lazy-loaded official Spotify player on the book page.
+- **Actual cover:** Ash and Pine's approved front cover is required by the build. Its local image paths (`cover` is the JPEG fallback; `coverBase` and `coverWidths` name the WebP/JPEG sizes), dimensions, alt text, source record, and publication date live with its book entry. See [cover provenance](docs/COVER.md) before replacing it.
+- **Author photograph:** `photograph` is the JPEG fallback and Open Graph image; `photographBase` and `photographWidths` name the responsive WebP/JPEG sizes. It appears on About and in the homepage teaser. Strip private EXIF/location metadata before adding it; `python scripts/portrait-webp.py` makes metadata-free WebP copies.
+- **Landscapes:** source photography and public derivatives are retained for future editorial use and are not rendered.
+- **Social cards:** Home, Writing and 404 share `shareImage` (the Ash and Pine card). Ash and Pine shares its actual front cover; About shares the portrait; Housefall shares its own `shareImage`.
 
-The editable social-card layout is in `scripts/share-card.html`. To regenerate the raster asset, serve that layout with the site fonts at `/assets/fonts/`, render at 1200 × 630, and replace `public/assets/social-card-editorial.jpg` with the resulting JPEG. Book shares use the actual front cover. Public titles and descriptors spell out **and**.
+The editable social-card layouts are in `scripts/share-card.html` (`#site` and `#housefall`). To regenerate them, serve `dist/` with that file copied in at `/scripts/share-card.html`, render each at 1200 × 630, and replace `public/assets/social-card.jpg` and `public/assets/social-card-housefall.jpg`. Public titles and descriptors spell out **and**.
 
-The supplied photo originals are retained locally in the ignored `reference-assets/` folder. Public derivatives omit source EXIF metadata. Home uses no photograph; About uses one restrained portrait. The rocky shore, cliff photograph and color portrait remain available for future use. Landscape photographs are not presented as book covers or locations from Housefall.
+The supplied photo originals are retained locally in the ignored `reference-assets/` folder. Public derivatives omit source EXIF metadata. Landscape photographs are not presented as book covers or locations from Housefall.
+
+**House style:** copy uses double hyphens (`--`), never em dashes. Page titles use a middle dot: "Writing · Andrew Grupp". The check fails on any em dash in the built site.
 
 Contact is generated and linked only when both `email` and `emailEnabled` are set. Journal is generated only when published entries exist. Until then, neither page appears in navigation or the sitemap. The footer contains no inactive correspondence link.
 
@@ -59,13 +63,15 @@ The workflow in `.github/workflows/pages.yml` builds, checks, and deploys `dist/
 
 Temporary address: https://hearthwalker.github.io/andrewgrupp.com/
 
-Local builds default to that address. The workflow uses the Pages-configured base URL, or an explicit repository variable `SITE_URL`. Relative links work at both the temporary project path and a future custom-domain root. Canonical URLs, Open Graph URLs, structured data, robots.txt, and the sitemap follow the build URL.
+Local builds default to that address. The workflow uses the Pages-configured base URL, or an explicit repository variable `SITE_URL`. Every page except 404 uses relative links, which work at both the temporary project path and a future custom-domain root. The 404 page can be served at any depth, so it uses the base path of the build URL (`/andrewgrupp.com/` now, `/` at the domain). Canonical URLs, Open Graph URLs, structured data, robots.txt, and the sitemap follow the build URL.
 
 For the future domain, see [the launch guide](docs/LAUNCH.md). Do not add a custom domain or redirect before ownership and DNS are ready.
 
 ## Design and licensing
 
-Warm paper `#F2EDE3`, forest ink `#262922`, sage `#777C6B`, copper `#9B7658`, and charcoal `#303030`. A full-height sage field occupies the right 42% of the desktop/tablet hero, reaching the viewport edge and meeting the Books band. It is omitted on phones. The homepage header contains navigation only; the visible hero contains the author name and approved introduction, while genre information remains in metadata. A pale sage surface holds the compact bibliography; forest anchors the footer. Darker copper is used for readable small metadata. Fonts: Cormorant Garamond and Source Serif 4, distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
+The palette comes from the Ash and Pine cover: warm paper `#F2EDE3`, fog wash `#E8E2D6`, ink `#2A2723`, soft charcoal `#5E5850`, fog gray `#8A847A` (hairlines only), and one accent, ember `#9C4A2B` (5.25:1 on paper, AA in both directions), used for the purchase button, link underlines and the current-page mark. Under `prefers-color-scheme: dark` the site becomes "night by the fire": warm charcoal `#211E1B`, paper-colored text `#E8E1D3` and a lifted ember `#D98B5F`. The only motion is a slow fade-in of the page, removed under `prefers-reduced-motion`.
+
+Fonts: Source Serif 4 (variable weight 400–600 with optical sizing, plus italic) for text, chosen for its sturdy screen reading and true small caps, which echo the book's section titles in labels and navigation. Cormorant Garamond Medium for display lines and verse. Both are subset to Latin WOFF2 from the Google Fonts sources and distributed under the SIL Open Font License. License files are in `public/assets/fonts/`. Website copy and author assets remain Andrew Grupp’s copyright; the repository grants no blanket content license.
 
 A small original inline SVG goat in the footer uses a native disclosure: hover or keyboard focus reveals "Aldric was here."; click, Enter, Space or a touch tap toggles it without JavaScript. Its 44px control encloses a 24px-high illustration.
 
