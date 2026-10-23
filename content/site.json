@@ -1,8 +1,10 @@
 {
   "name": "Andrew Grupp",
-  "shareImage": "assets/social-card-editorial.jpg",
+  "shareImage": "assets/social-card.jpg",
+  "shareImageAlt": "Andrew Grupp. Ash and Pine: A Collection of Prose and Poetry.",
   "identity": "Poetry, prose and literary fiction",
   "introduction": "People, places, and the complicated business of being alive.",
+  "invitation": "Come sit awhile. There's room beside the fire.",
   "biography": [
     "Andrew Grupp is the author of Ash and Pine: A Collection of Prose and Poetry (2026). The collection gathers poems and essays on fatherhood, grief, faith and the practice of kindness.",
     "He lives in Nebraska and is currently writing Housefall, a literary historical novel set in the Northern Marches."
@@ -10,7 +12,8 @@
   "email": "hello@andrewgrupp.com",
   "emailEnabled": false,
   "photograph": "assets/photography/andrew-grupp-monochrome-800.jpg",
-  "photographSmall": "assets/photography/andrew-grupp-monochrome-480.jpg",
+  "photographBase": "assets/photography/andrew-grupp-monochrome",
+  "photographWidths": [480, 800],
   "photographAlt": "Black-and-white portrait of Andrew Grupp wearing glasses and a knit sweater.",
   "landscapes": {
     "writing": {
@@ -34,18 +37,33 @@
       "description": [
         "Poems and essays from the road, the lakeshore and the long winters between. About a daughter never held and children 800 miles away. About a God who didn't show. And a fire that stayed lit anyway.",
         "Ash and Pine: A Collection of Prose and Poetry gathers years of writing about fatherhood, grief, faith and the stubborn work of staying human when life has given you every reason to become something harder.",
-        "Across humid Tuesday nights, storm-battered camps and dark parking lots a long way from home, Andrew Grupp explores what remains when certainty falls apart — and what we can rebuild from the pieces. These are reflections on the unraveling of old beliefs and the unexpected sacredness of ordinary things: a discount kitchen table bearing a dog's tooth marks, a diesel heater squaring its shoulders against the cold, a three-legged plastic dinosaur in an old ammo crate and the people we carry with us even when they're gone.",
+        "Across humid Tuesday nights, storm-battered camps and dark parking lots a long way from home, Andrew Grupp explores what remains when certainty falls apart -- and what we can rebuild from the pieces. These are reflections on the unraveling of old beliefs and the unexpected sacredness of ordinary things: a discount kitchen table bearing a dog's tooth marks, a diesel heater squaring its shoulders against the cold, a three-legged plastic dinosaur in an old ammo crate and the people we carry with us even when they're gone.",
         "There are no easy answers here. No promises that suffering happens for a reason, or that everything broken will someday be made whole.",
         "Only the conviction that kindness is a discipline. That solitude is a practice. That even in the ash, there is still an ember worth tending. And that sometimes, surviving another winter is its own quiet act of courage.",
         "Come sit awhile. There's room beside the fire. May none cross winter left behind."
       ],
+      "heroLine": "Poems and essays from the road, the lakeshore and the long winters between.",
+      "excerpts": [
+        {
+          "title": "Hearthwalker",
+          "lines": [
+            "I am not here to save you.",
+            "I am not here to fix what broke before you found this fire.",
+            "I am here to see you. To feed you.",
+            "To make sure you know your heart is safe here."
+          ]
+        }
+      ],
+      "praise": [],
       "cover": "assets/books/ash-and-pine-approved-720.jpg",
-      "coverSmall": "assets/books/ash-and-pine-approved-360.jpg",
+      "coverBase": "assets/books/ash-and-pine-approved",
+      "coverWidths": [360, 480, 720, 960],
       "coverWidth": 720,
       "coverHeight": 1113,
-      "coverAlt": "Cover of Ash and Pine: A Collection of Prose and Poetry by Andrew Grupp",
+      "coverAlt": "Cover of Ash and Pine: A Collection of Prose and Poetry by Andrew Grupp. A black-and-white photograph of spruce and beetle-killed snags in fog along a mountain meadow road.",
       "coverSource": "Ash_and_Pine_COVER_FINAL.pdf",
       "purchaseUrl": "https://www.amazon.com/dp/B0HN6P7XNH",
+      "purchaseLabel": "Buy on Amazon",
       "playlistUrl": "https://open.spotify.com/playlist/30BQHSBfjqc9lTErFWJiLp"
     },
     {
@@ -62,6 +80,10 @@
         "Marek opens the door.",
         "Housefall is a literary historical novel about the uneasy distance between love and loyalty, the wounds we inflict upon those we cherish, and what remains of a life when its foundations give way."
       ],
+      "excerpts": [],
+      "praise": [],
+      "shareImage": "assets/social-card-housefall.jpg",
+      "shareImageAlt": "Housefall, a novel in progress by Andrew Grupp. The hall still stands. Everything that made it a home is gone.",
       "cover": null,
       "coverAlt": null,
       "purchaseUrl": null,
