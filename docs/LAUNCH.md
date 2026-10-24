@@ -6,8 +6,28 @@ Intended domain: **andrewgrupp.com**. Registration and ownership are unconfirmed
 
 1. Register or confirm ownership of `andrewgrupp.com` and provide access to its DNS settings when ready.
 2. Create and test `hello@andrewgrupp.com` with a mail provider. GitHub Pages does not provide email. Set `emailEnabled` to `true` only after receiving a test message successfully.
+3. Set up the email list in Kit with a virtual mailing address (see [Email list](#email-list-kit) below).
 
 The mandatory Ash and Pine front cover is extracted from Andrew's approved final PDF and integrated locally. The book description and confirmed product/playlist links are preserved. Housefall uses Andrew's supplied promotional synopsis and remains historical fiction in progress, with no publication date or purchase link. There are no remaining redesign content approvals. Journal and correspondence remain hidden until functional content or a tested mailbox is available.
+
+## Email list (Kit)
+
+The site's signup is built and hidden behind `letters.enabled` in `content/site.json`. Deliverability depends on the domain, so do this after the domain and its DNS are in hand.
+
+1. **Mailing address.** US law (CAN-SPAM) requires a valid postal address in every marketing email. Use a virtual mailbox or PO box, not a residence: for example a USPS PO Box, a UPS Store mailbox, or a virtual-mail service such as Anytime Mailbox or iPostal1. Confirm the provider gives a street-style address that accepts mail.
+2. **Kit account.** Sign up for the free Newsletter plan at kit.com. Enter the virtual address as the account's physical address (it appears in the email footer).
+3. **Sending domain.** In Kit's email settings, set the sender to an `@andrewgrupp.com` address (for example `letters@` or `hello@`) and add the DKIM/SPF records Kit supplies to the domain's DNS. Add a DMARC record if the mail provider has not (`_dmarc` TXT, starting with `v=DMARC1; p=none;`). Preserve these when editing website records.
+4. **Form.** Create an inline form in Kit. In its settings:
+   - Turn on double opt-in (incentive email).
+   - Set the after-subscribe redirect to `https://andrewgrupp.com/letters/thanks/`.
+   - Set the after-confirm redirect to `https://andrewgrupp.com/letters/confirmed/`.
+   - Copy the form's numeric ID from its URL or embed code.
+5. **Welcome email.** Add a short welcome sequence or automation. Optionally include a small thank-you (an unpublished poem or an early Housefall passage).
+6. **Turn it on.** In `content/site.json`, set `letters.formAction` to `https://app.kit.com/forms/<ID>/subscriptions` and `letters.enabled` to `true`. The build rejects any other form address.
+7. **Test end to end** on the live site: subscribe with a personal address, confirm you land on the two pages above, confirm the welcome arrives in the inbox (not spam), and that unsubscribing works. Kit may show its own spam check (reCAPTCHA) before redirecting; that is expected.
+8. **Books.** Add `andrewgrupp.com/letters/` to the back matter of the next Ash and Pine revision (Kindle and print).
+
+Privacy: the site itself still loads no scripts or trackers. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
 
 ## Current GitHub Pages setup
 

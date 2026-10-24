@@ -20,6 +20,7 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `hello@andrewgrupp.com` is reserved in the configuration. After creating and testing the mailbox, set `emailEnabled` to `true`. Until then the site publishes no email address or dead mail link.
+- **Letters (email list):** `letters` holds the Kit signup. While `enabled` is `false` the site renders no form, no `/letters/` pages and no footer link. When on, a signup band appears on the homepage (after Housefall) and the Housefall page, and the footer links to `/letters/`. Each is a plain HTML form posting to Kit, with no JavaScript. `deck`, `description` and `note` are the copy. See [the launch guide](docs/LAUNCH.md#email-list-kit) for setup.
 - **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, purchase button, playlist link and first excerpt. The `invitation` line closes the excerpt band. Below it are the book in progress (Housefall) and an about teaser using `introduction`, the second `biography` paragraph and the portrait. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Excerpts:** each book's `excerpts` is a list of `{ "title": "...", "lines": ["...", "..."] }`. Every string in `lines` is one line of verse, kept whole; long lines turn over with a hanging indent on phones. An empty list (Housefall today) renders nothing.

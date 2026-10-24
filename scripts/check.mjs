@@ -5,6 +5,7 @@ async function walk(dir) {const found=[]; for(const item of await readdir(dir,{w
 const files = await walk(root);
 const pages = files.filter(f=>f.endsWith('.html'));
 const content=JSON.parse(await readFile('content/site.json','utf8'));
+const letters=content.letters||{};
 const errors=[];
 let checked=0;
 const siteBase = new URL((await readFile(path.join(root,'index.html'),'utf8')).match(/rel="canonical" href="([^"]+)/)[1]);
@@ -36,6 +37,13 @@ for(const file of pages){
   assert(!readable.includes('&'),'unnecessary ampersand in literary copy or title');
   assert(!/Ash\s*(?:&|&amp;)\s*Pine/i.test(html),'incorrect published book title');
   if(!content.emailEnabled)assert(!/href="[^"]*contact\//.test(html),'inactive contact promoted');
+  if(!letters.enabled)assert(!/<form\b/.test(html) && !/href="[^"]*letters\//.test(html),'inactive letters signup promoted');
+  // Signup forms post only to the configured Kit form, with a labelled email field.
+  for(const form of html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/g)){
+    assert(form[0].includes(`action="${esc(letters.formAction)}" method="post"`),'form must post to the configured Kit form');
+    const input=form[0].match(/<input\b[^>]*id="([^"]+)"[^>]*>/);
+    assert(input && /type="email" name="email_address"[^>]*required/.test(input[0]) && form[0].includes(`<label class="label" for="${input[1]}">`),'signup email field must be labelled and required');
+  }
   for(const meta of html.matchAll(/<meta (?:name="description"|property="og:(?:title|description|image:alt)") content="([^"]+)"/g))assert(!meta[1].includes('&amp;'),'unnecessary ampersand in metadata');
   for(const img of html.matchAll(/<img\b[^>]*>/g)){
     assert(/alt="[^"]+"/.test(img[0]),'image requires meaningful alt text');
@@ -85,6 +93,13 @@ if(!/@media\s*\(prefers-reduced-motion:\s*reduce\)/.test(css))errors.push('Reduc
 if(!content.journal.some(e=>e.published===true) && files.some(f=>path.relative(root,f).startsWith('journal'+path.sep))) errors.push('Empty journal must not be published');
 if(!content.emailEnabled && files.some(f=>path.relative(root,f).startsWith('contact'+path.sep)))errors.push('Inactive Contact page must not be generated');
 const read = route => readFile(path.join(root,route),'utf8');
+if(!letters.enabled && files.some(f=>path.relative(root,f).startsWith('letters'+path.sep)))errors.push('Inactive Letters pages must not be generated');
+if(letters.enabled){
+  for(const route of ['letters/index.html','letters/thanks/index.html','letters/confirmed/index.html'])try{await stat(path.join(root,route))}catch{errors.push(`Letters: ${route} missing`)}
+  const sitemap=await read('sitemap.xml');
+  if(!sitemap.includes('/letters/</loc>') || sitemap.includes('/letters/thanks/') || sitemap.includes('/letters/confirmed/'))errors.push('Letters: only the signup page belongs in the sitemap');
+  for(const route of ['letters/thanks/index.html','letters/confirmed/index.html'])if(!(await read(route).catch(()=>'')).includes('<meta name="robots" content="noindex">'))errors.push(`Letters: ${route} must be noindex`);
+}
 const home=await read('index.html');
 const ash=content.books.find(b=>b.slug==='ash-and-pine');
 const novel=content.books.find(b=>b.slug==='housefall');
@@ -115,4 +130,4 @@ if(/isbn/i.test(ashHtml))errors.push('No ISBN is on record; do not publish one')
 if(novelHtml.includes('datePublished')||novel.purchaseUrl)errors.push('Housefall must not have a publication date or purchase link');
 if(!novelHtml.includes(`<p class="novel-tagline">`) || !novel.tagline.split(/(?<=\.)\s+/).every(s=>novelHtml.includes(`<span>${esc(s)}</span>`)))errors.push('Housefall tagline missing');
 if(!novel.excerpts.length && novelHtml.includes('excerpt-band'))errors.push('Housefall excerpt must stay empty until one is added');
-if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`PASS: ${pages.length} HTML pages, ${checked} local links/assets, Aldric intact on every page, verse line breaks, house style, metadata, landmarks, image alt text and dimensions, structured data, inactive email, and journal visibility.`);
+if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`PASS: ${pages.length} HTML pages, ${checked} local links/assets, Aldric intact on every page, verse line breaks, house style, metadata, landmarks, image alt text and dimensions, structured data, inactive email, letters signup, and journal visibility.`);
