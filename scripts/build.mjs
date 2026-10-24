@@ -84,8 +84,8 @@ async function page(route, title, description, active, render, {type='website', 
   const href = target => `${prefix}${target}`;
   const canonical = `${origin}/${route}`;
   const home = route === '';
-  const nav = [['writing/','Writing'],['about/','About'], ...(entries.length ? [['journal/','Journal']] : []), ...(contactEnabled ? [['contact/','Contact']] : [])];
-  const footerNav = [...nav, ...(lettersEnabled ? [['letters/','Letters']] : [])];
+  const nav = [['writing/','Writing'],['about/','About'], ...(lettersEnabled ? [['letters/','Letters']] : []), ...(entries.length ? [['journal/','Journal']] : []), ...(contactEnabled ? [['contact/','Contact']] : [])];
+  const footerNav = nav;
   const data = schema || graph(website, person);
   const social = share || defaultShare;
   const html = `<!doctype html>
