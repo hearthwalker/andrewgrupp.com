@@ -3,11 +3,12 @@
   "shareImage": "assets/social-card.jpg",
   "shareImageAlt": "Andrew Grupp. Ash and Pine: A Collection of Prose and Poetry.",
   "identity": "Poetry, prose and literary fiction",
-  "introduction": "Stories and essays on the weight of ordinary life.",
+  "introduction": "Truth, told kindly.",
   "invitation": "Come sit awhile. There's room beside the fire.",
   "biography": [
-    "Andrew Grupp is the author of Ash and Pine (2026), a collection of prose and poetry examining fatherhood, grief, faith, and the practice of kindness.",
-    "Raised in South Dakota and Iowa, Andrew now lives in Nebraska, where he balances a career in systems engineering with his writing. He is currently at work on Housefall, a novel set on a cold northern frontier."
+    "Andrew Grupp writes about what people carry: fatherhood, grief, faith and its unraveling, and the daily discipline of kindness. His first book, Ash and Pine, a collection of poetry and prose, was published in 2026.",
+    "He was born in Concord, Massachusetts, and raised in South Dakota -- a New Englander on paper, a plainsman by everything since. The northern prairie, with its weather, its distances and its long winters, runs through all of his work.",
+    "He is at work on Housefall, a mythic novel about a father who loses his hall to a stranger and refuses both violence and disappearance on the road back to his children. He lives in Albion, Nebraska."
   ],
   "email": "inquiries@andrewgrupp.com",
   "emailEnabled": true,
