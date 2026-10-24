@@ -230,7 +230,8 @@ button.button{border:0;font-family:inherit;cursor:pointer}
   .book-reading>*{grid-column:1}
   .book-reading .prose{margin-inline:auto}
   .about-layout{gap:32px}
-  .portrait{justify-self:start;width:min(100%,360px)}
+  /* Small enough on phones that the name and biography start on the first screen. */
+  .portrait{justify-self:start;width:min(56vw,210px)}
   .footer-inner{grid-template-columns:minmax(0,1fr) auto;gap:4px 20px;padding-block:16px}
   .footer-credit{grid-column:1;grid-row:1/3}
   .aldric{grid-column:2;grid-row:2}
