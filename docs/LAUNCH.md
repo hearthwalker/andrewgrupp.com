@@ -1,65 +1,44 @@
-# Publication and custom-domain handover
+# Publication record
 
-Intended domain: **andrewgrupp.com**. Registration and ownership are unconfirmed. No DNS or custom-domain change is made by this repository.
+The site is live at **https://andrewgrupp.com** on GitHub Pages with HTTPS enforced. The `www` host and the old project address (https://hearthwalker.github.io/andrewgrupp.com/) redirect there.
 
-## Author input still needed
+## Still to do
 
-1. Register or confirm ownership of `andrewgrupp.com` and provide access to its DNS settings when ready.
-2. Create and test `hello@andrewgrupp.com` with a mail provider. GitHub Pages does not provide email. Set `emailEnabled` to `true` only after receiving a test message successfully.
-3. Set up the email list in Kit with a virtual mailing address (see [Email list](#email-list-kit) below).
+1. **Kit mailing address.** US law (CAN-SPAM) requires a valid postal address in every marketing email, and Kit prints the account's address in each footer. Use a virtual mailbox or PO box, never a residence: a USPS PO Box, a UPS Store mailbox, or a virtual-mail service such as Anytime Mailbox or iPostal1. Set it before the first send.
+2. **Kit sending-domain verification.** The SPF/DKIM/DMARC records are in Namecheap and match publicly; Kit's check had not passed yet. Press **Verify** again in Kit. If it still fails 48 hours after the records went in, ask Kit support.
+3. **Deliverability test.** Once verified, send a test broadcast to a personal Gmail address and confirm it lands in the inbox, not spam or promotions.
+4. **Welcome email.** Add a short welcome sequence in Kit. Optionally include a small thank-you (an unpublished poem or an early Housefall passage).
+5. **Books.** Add `andrewgrupp.com/letters/` to the back matter of the next Ash and Pine revision (Kindle and print).
 
-The mandatory Ash and Pine front cover is extracted from Andrew's approved final PDF and integrated locally. The book description and confirmed product/playlist links are preserved. Housefall uses Andrew's supplied promotional synopsis and remains historical fiction in progress, with no publication date or purchase link. There are no remaining redesign content approvals. Journal and correspondence remain hidden until functional content or a tested mailbox is available.
+## What is live
 
-## Email list (Kit)
+- **Site:** built and checked by `.github/workflows/pages.yml` on every push to `main`, then deployed to the `github-pages` environment. Pages source is **GitHub Actions**. The Actions variable `SITE_URL` is `https://andrewgrupp.com`.
+- **Correspondence:** `hello@andrewgrupp.com` forwards (free, through Namecheap) to the author's personal inbox, and delivery has been tested. The Contact page publishes it (`emailEnabled: true`).
+- **Letters (email list):** Kit's free Newsletter plan. Form `10089306`, with email confirmation required. `hello@andrewgrupp.com` is Kit's default sender. Signup sections are on the homepage and Housefall page, with `/letters/`, `/letters/thanks/` and `/letters/confirmed/`. Kit's form settings redirect to the last two after signup and after confirmation.
 
-The site's signup is built and hidden behind `letters.enabled` in `content/site.json`. Deliverability depends on the domain, so do this after the domain and its DNS are in hand.
+Privacy: the site itself loads no scripts or trackers. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
 
-1. **Mailing address.** US law (CAN-SPAM) requires a valid postal address in every marketing email. Use a virtual mailbox or PO box, not a residence: for example a USPS PO Box, a UPS Store mailbox, or a virtual-mail service such as Anytime Mailbox or iPostal1. Confirm the provider gives a street-style address that accepts mail.
-2. **Kit account.** Sign up for the free Newsletter plan at kit.com. Enter the virtual address as the account's physical address (it appears in the email footer).
-3. **Sending domain.** In Kit's email settings, set the sender to an `@andrewgrupp.com` address (for example `letters@` or `hello@`) and add the DKIM/SPF records Kit supplies to the domain's DNS. Add a DMARC record if the mail provider has not (`_dmarc` TXT, starting with `v=DMARC1; p=none;`). Preserve these when editing website records.
-4. **Form.** Create an inline form in Kit. In its settings:
-   - Turn on double opt-in (incentive email).
-   - Set the after-subscribe redirect to `https://andrewgrupp.com/letters/thanks/`.
-   - Set the after-confirm redirect to `https://andrewgrupp.com/letters/confirmed/`.
-   - Copy the form's numeric ID from its URL or embed code.
-5. **Welcome email.** Add a short welcome sequence or automation. Optionally include a small thank-you (an unpublished poem or an early Housefall passage).
-6. **Turn it on.** In `content/site.json`, set `letters.formAction` to `https://app.kit.com/forms/<ID>/subscriptions` and `letters.enabled` to `true`. The build rejects any other form address.
-7. **Test end to end** on the live site: subscribe with a personal address, confirm you land on the two pages above, confirm the welcome arrives in the inbox (not spam), and that unsubscribing works. Kit may show its own spam check (reCAPTCHA) before redirecting; that is expected.
-8. **Books.** Add `andrewgrupp.com/letters/` to the back matter of the next Ash and Pine revision (Kindle and print).
+To change the Kit form, update `letters.formAction` in `content/site.json`; the build accepts only `https://app.kit.com/forms/<ID>/subscriptions`. Setting `letters.enabled` to `false` removes every form, the Letters pages and the navigation link.
 
-Privacy: the site itself still loads no scripts or trackers. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
+## DNS (Namecheap)
 
-## Current GitHub Pages setup
+Records at Namecheap **Advanced DNS** serve the website, mail forwarding and Kit. When editing any of them, change only what you mean to and preserve the rest:
 
-Repository: https://github.com/hearthwalker/andrewgrupp.com
+| Purpose | Type | Host | Value |
+| --- | --- | --- | --- |
+| Website | A | @ | 185.199.108.153 |
+| Website | A | @ | 185.199.109.153 |
+| Website | A | @ | 185.199.110.153 |
+| Website | A | @ | 185.199.111.153 |
+| Website | CNAME | www | hearthwalker.github.io |
+| GitHub domain verification | TXT | as issued by GitHub | keep |
+| Mail forwarding | MX / TXT | as set by Namecheap email forwarding | keep |
+| Kit sending | SPF / DKIM records | as supplied by Kit | keep |
+| Reporting | TXT | _dmarc | DMARC monitoring policy (`p=none`) |
 
-Temporary site: https://hearthwalker.github.io/andrewgrupp.com/
+Do not add a wildcard record. In Namecheap, the **Host** field takes only the part before the domain (for example `_dmarc`, not `_dmarc.andrewgrupp.com`).
 
-GitHub Pages must use **GitHub Actions** as its source. Each push to `main` rebuilds and checks the pages before deploying. The deployment environment is `github-pages`.
-
-## Namecheap DNS, when the domain is owned
-
-These instructions use GitHub’s documented IPv4 records and Namecheap’s Advanced DNS interface. Confirm the linked official guidance when making the change.
-
-1. In the GitHub account’s **Settings → Pages**, verify `andrewgrupp.com` by adding the specific TXT record GitHub supplies. Its value cannot be prepared before GitHub issues it. Preserve the TXT record afterward.
-2. In the repository’s **Settings → Pages → Custom domain**, enter `andrewgrupp.com` and save **before** pointing DNS at GitHub.
-3. If using Namecheap BasicDNS, open **Domain List → Manage → Advanced DNS → Host Records**. If using other nameservers, edit records at the actual authoritative DNS provider instead.
-4. Remove only conflicting website parking/redirect records for `@` and `www`. Preserve mail-provider MX, SPF, DKIM, DMARC and other unrelated verification records.
-5. Add these records, using automatic/default TTL:
-
-| Type | Host | Value |
-| --- | --- | --- |
-| A | @ | 185.199.108.153 |
-| A | @ | 185.199.109.153 |
-| A | @ | 185.199.110.153 |
-| A | @ | 185.199.111.153 |
-| CNAME | www | hearthwalker.github.io |
-
-Do not include the repository path or `https://` in DNS values. Do not add a wildcard record. IPv6 is optional; if used, copy all four current AAAA values from GitHub’s official guidance.
-
-6. Set the repository’s Actions variable `SITE_URL` to `https://andrewgrupp.com` and rerun the publication workflow. Actions deployment does not require a CNAME file; the Pages custom-domain setting controls routing.
-7. Wait for DNS verification and certificate issuance, then enable **Enforce HTTPS** in Pages settings when available. GitHub says availability can take up to 24 hours.
-8. Verify `https://andrewgrupp.com`, its `www` redirect, all book pages, canonical and Open Graph URLs, `robots.txt`, and `sitemap.xml`. Check the temporary GitHub address redirects appropriately. Verify mail delivery separately.
+If the site ever moves, also update `SITE_URL` and the custom domain in the repository's **Settings → Pages**.
 
 Official references, checked October 21, 2026:
 

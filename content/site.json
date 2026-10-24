@@ -10,7 +10,7 @@
     "He lives in Nebraska and is currently writing Housefall, a literary historical novel set on a cold northern frontier."
   ],
   "email": "hello@andrewgrupp.com",
-  "emailEnabled": false,
+  "emailEnabled": true,
   "letters": {
     "enabled": true,
     "formAction": "https://app.kit.com/forms/10089306/subscriptions",

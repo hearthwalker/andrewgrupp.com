@@ -19,8 +19,8 @@ Preview: http://127.0.0.1:4173. Stop the server with Ctrl+C. Rebuild and refresh
 Edit `content/site.json`. Text is escaped automatically; paragraphs are plain strings, not HTML.
 
 - **Biography:** update `biography` paragraphs and `introduction`.
-- **Correspondence:** `hello@andrewgrupp.com` is reserved in the configuration. After creating and testing the mailbox, set `emailEnabled` to `true`. Until then the site publishes no email address or dead mail link.
-- **Letters (email list):** `letters` holds the Kit signup. While `enabled` is `false` the site renders no form, no `/letters/` pages and no footer link. When on, a signup band appears on the homepage (after Housefall) and the Housefall page, and the footer links to `/letters/`. Each is a plain HTML form posting to Kit, with no JavaScript. `deck`, `description` and `note` are the copy. See [the launch guide](docs/LAUNCH.md#email-list-kit) for setup.
+- **Correspondence:** `hello@andrewgrupp.com` forwards to the author's inbox and is published on the Contact page (`emailEnabled: true`). Setting `emailEnabled` to `false` removes the page and its links.
+- **Letters (email list):** `letters` holds the Kit signup (live). A signup band appears on the homepage (after Housefall) and the Housefall page, and Letters is in the navigation. Each is a plain HTML form posting to Kit, with no JavaScript. `deck`, `description` and `note` are the copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
 - **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, purchase button, playlist link and first excerpt. The `invitation` line closes the excerpt band. Below it are the book in progress (Housefall) and an about teaser using `introduction`, the second `biography` paragraph and the portrait. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Excerpts:** each book's `excerpts` is a list of `{ "title": "...", "lines": ["...", "..."] }`. Every string in `lines` is one line of verse, kept whole; long lines turn over with a hanging indent on phones. An empty list (Housefall today) renders nothing.
@@ -62,11 +62,11 @@ Change `published` to `true` to generate the entry, Journal index, navigation li
 
 The workflow in `.github/workflows/pages.yml` builds, checks, and deploys `dist/` on pushes to `main`. In the repository, choose **Settings → Pages → Source → GitHub Actions**. The deploy job uses GitHub’s short-lived OIDC permissions; no deploy keys or secret tokens are needed.
 
-Temporary address: https://hearthwalker.github.io/andrewgrupp.com/
+Live address: https://andrewgrupp.com (the old https://hearthwalker.github.io/andrewgrupp.com/ redirects there).
 
-Local builds default to that address. The workflow uses the Pages-configured base URL, or an explicit repository variable `SITE_URL`. Every page except 404 uses relative links, which work at both the temporary project path and a future custom-domain root. The 404 page can be served at any depth, so it uses the base path of the build URL (`/andrewgrupp.com/` now, `/` at the domain). Canonical URLs, Open Graph URLs, structured data, robots.txt, and the sitemap follow the build URL.
+Local builds default to the live address. The workflow uses the repository variable `SITE_URL` (set to `https://andrewgrupp.com`), falling back to the Pages-configured base URL. Every page except 404 uses relative links, which work at a domain root or under a project path. The 404 page can be served at any depth, so it uses the base path of the build URL. Canonical URLs, Open Graph URLs, structured data, robots.txt, and the sitemap follow the build URL.
 
-For the future domain, see [the launch guide](docs/LAUNCH.md). Do not add a custom domain or redirect before ownership and DNS are ready.
+For what is live, DNS records, and remaining tasks, see [the publication record](docs/LAUNCH.md).
 
 ## Design and licensing
 
