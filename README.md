@@ -19,7 +19,7 @@ Preview: http://127.0.0.1:4173. Stop the server with Ctrl+C. Rebuild and refresh
 Edit `content/site.json`. Text is escaped automatically; paragraphs are plain strings, not HTML.
 
 - **Biography:** update `biography` paragraphs and `introduction`.
-- **Correspondence:** `hello@andrewgrupp.com` forwards to the author's inbox and is published on the Contact page (`emailEnabled: true`). Setting `emailEnabled` to `false` removes the page and its links.
+- **Correspondence:** `inquiries@andrewgrupp.com` forwards to the author's inbox and is published on the Contact page (`emailEnabled: true`). `hello@andrewgrupp.com` remains active for Kit. Setting `emailEnabled` to `false` removes the page and its links.
 - **Letters (email list):** `letters` holds the Kit signup (live). A signup band appears on the Housefall page and `/letters/`, and Letters is in the navigation. Each is a plain HTML form posting to Kit, with no JavaScript. `deck`, `description` and `note` are the copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
 - **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, purchase button, playlist link and first excerpt. The `invitation` line closes the excerpt band, and the homepage ends there; Housefall, About and Letters are reached from the navigation. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
