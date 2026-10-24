@@ -112,10 +112,9 @@ for(const excerpt of ash.excerpts){
 }
 if(!home.includes(verseMarkup(ash.excerpts[0])))errors.push('Home: featured excerpt line breaks not preserved');
 if(!content.invitation.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${esc(s)}</span>`)))errors.push('Home: invitation line missing');
-if(!novel.tagline.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${esc(s)}</span>`)))errors.push('Home: Housefall tagline missing');
 if(!/<title>Andrew Grupp · Poetry, Prose and Literary Fiction<\/title>/.test(home))errors.push('Homepage genre metadata missing');
 if(!home.includes(`href="${esc(ash.purchaseUrl)}"`) || !home.includes(`href="${esc(ash.playlistUrl)}"`))errors.push('Home: Amazon and playlist links required');
-if(!home.includes(content.aboutPhotographBase || content.photographBase))errors.push('Home: about teaser portrait missing');
+if(/home-novel|home-about|class="[^"]*\bletters\b/.test(home))errors.push('Home: only the featured book and its excerpt belong here');
 if(!ash.cover || !ash.coverSource || !ashHtml.includes(`src="../../${ash.cover}"`))errors.push('Approved Ash and Pine front cover must be rendered');
 if(!ash.coverAlt || !ashHtml.includes(`width="${ash.coverWidth}" height="${ash.coverHeight}"`))errors.push('Cover alt text or dimensions missing');
 if(Math.abs(ash.coverWidth/ash.coverHeight-5.5/8.5)>.002)errors.push('Front-cover aspect ratio does not match approved print trim');

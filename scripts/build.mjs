@@ -34,8 +34,7 @@ for (const book of site.books) {
   if (book.playlistUrl && !/^https:\/\/open\.spotify\.com\/playlist\/[A-Za-z0-9]+$/.test(book.playlistUrl)) throw new Error('Playlist must be an open.spotify.com playlist URL.');
 }
 const featured = site.books.find(book => book.year && book.cover);
-const novel = site.books.find(book => !book.year);
-if (!featured || !novel) throw new Error('Home needs one published book with a cover and one book in progress.');
+if (!featured) throw new Error('Home needs one published book with a cover.');
 await rm(out, {recursive:true, force:true});
 await mkdir(out, {recursive:true});
 await cp(path.join(root,'public'), out, {recursive:true});
@@ -130,12 +129,7 @@ await page('', `${site.name} · Poetry, Prose and Literary Fiction`, `${featured
 <a class="hero-cover cover" href="${href(bookUrl(featured))}">${coverPicture(href, featured, '(max-width: 760px) min(60vw, 250px), 400px', true)}</a>
 <div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${esc(featured.heroLine)}</p>${actions(featured)}</div>
 </div></section>
-<section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>
-<section class="home-section home-novel" aria-labelledby="novel-title"><div class="shell home-novel-inner"><div class="home-novel-meta"><p class="label">${esc(novel.status)}</p><h2 id="novel-title"><a href="${href(bookUrl(novel))}">${esc(novel.title)}</a></h2><p class="book-subtitle">${esc(novel.subtitle)}</p></div>
-<div class="home-novel-copy"><p class="novel-line">${sentences(novel.tagline)}</p>${paragraphs(novel.description.slice(1,3))}<a class="text-link" href="${href(bookUrl(novel))}">About the novel ${arrow}</a></div></div></section>
-${lettersBand('home-letters', 'Letters from the fire', letters.deck)}
-<section class="home-section home-about" aria-labelledby="about-title"><div class="shell home-about-inner"><div class="home-portrait">${aboutPicture(href, '(max-width: 760px) min(56vw, 220px), 260px', false)}</div>
-<div class="home-about-copy"><p class="label">About</p><h2 id="about-title">${esc(site.name)}</h2><p class="lede">${esc(site.introduction)}</p><p>${esc(site.biography[1])}</p><a class="text-link" href="${href('about/')}">More about Andrew ${arrow}</a></div></div></section>`, {schema:graph(website, person, bookData(featured))});
+<section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>`, {schema:graph(website, person, bookData(featured))});
 
 await page('writing/', `Writing · ${site.name}`, 'Published work and literary fiction in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `<div class="shell page-content">${pageHeading('Writing','Books and works in progress.')}<ul class="shelf" role="list">${site.books.map(book => `<li><a class="shelf-link" href="${href(bookUrl(book))}"><div class="shelf-stand">${book.cover ? `<div class="cover">${coverPicture(href, book, '(max-width: 600px) calc(50vw - 40px), 250px', true)}</div>` : `<div class="type-cover" aria-hidden="true"><span><span class="type-cover-title">${esc(book.title)}</span><span class="type-cover-rule"></span></span><span class="type-cover-status">${esc(book.status)}</span></div>`}</div><div class="shelf-caption"><p class="label">${esc(book.status)}</p><h2 class="shelf-title">${esc(book.title)}</h2><p class="shelf-subtitle">${esc(book.subtitle)}</p></div></a></li>`).join('')}</ul></div>`);
 
