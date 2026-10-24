@@ -170,7 +170,7 @@ main:focus{outline:none}
 /* Letters: a plain form that posts to the mailing-list provider. */
 .letters-inner{max-width:34rem;margin-inline:auto;text-align:center}
 .letters h2{font-size:clamp(38px,4vw,52px)}
-.letters-line{font-style:italic;font-size:20px;color:var(--soft);margin:14px 0 0}
+.letters-line{font-style:italic;font-size:20px;color:var(--soft);margin:14px 0 0;text-wrap:balance}
 .signup{max-width:30rem;margin:36px auto 0;text-align:left}
 .signup .label{text-align:left;margin-bottom:8px}
 .signup-row{display:flex;gap:12px}
