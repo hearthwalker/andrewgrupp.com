@@ -4,17 +4,16 @@ The site is live at **https://andrewgrupp.com** on GitHub Pages with HTTPS enfor
 
 ## Still to do
 
-1. **Kit mailing address.** US law (CAN-SPAM) requires a valid postal address in every marketing email, and Kit prints the account's address in each footer. Use a virtual mailbox or PO box, never a residence: a USPS PO Box, a UPS Store mailbox, or a virtual-mail service such as Anytime Mailbox or iPostal1. Set it before the first send.
-2. **Kit sending-domain verification.** The SPF/DKIM/DMARC records are in Namecheap and match publicly; Kit's check had not passed yet. Press **Verify** again in Kit. If it still fails 48 hours after the records went in, ask Kit support.
-3. **Deliverability test.** Once verified, send a test broadcast to a personal Gmail address and confirm it lands in the inbox, not spam or promotions.
-4. **Welcome email.** Add a short welcome sequence in Kit. Optionally include a small thank-you (an unpublished poem or an early Housefall passage).
-5. **Books.** Add `andrewgrupp.com/letters/` to the back matter of the next Ash and Pine revision (Kindle and print).
+1. **Kit sending-domain verification.** The SPF/DKIM/DMARC records are in Namecheap and match publicly; Kit's check had not passed yet. Press **Verify** again in Kit. If it still fails 48 hours after the records went in, ask Kit support.
+2. **Deliverability test.** Once verified, send a test broadcast to a personal Gmail address and confirm it lands in the inbox, not spam or promotions.
+3. **Books.** Add `andrewgrupp.com/letters/` to the back matter of the next Ash and Pine revision (Kindle and print).
 
 ## What is live
 
 - **Site:** built and checked by `.github/workflows/pages.yml` on every push to `main`, then deployed to the `github-pages` environment. Pages source is **GitHub Actions**. The Actions variable `SITE_URL` is `https://andrewgrupp.com`.
 - **Correspondence:** `inquiries@andrewgrupp.com` forwards (free, through Namecheap) to the author's personal inbox. The Contact page publishes it (`emailEnabled: true`). `hello@andrewgrupp.com` remains active for Kit and existing correspondence.
 - **Letters (email list):** Kit's free Newsletter plan. Form `10089306`, with email confirmation required. `hello@andrewgrupp.com` is Kit's default sender. The signup is on the Housefall page and `/letters/`, `/letters/thanks/` and `/letters/confirmed/`. Kit's form settings redirect to the last two after signup and after confirmation.
+- **Kit emails:** the form's confirmation email doubles as the welcome message: a "Yes, send me letters" button (ember `#9C4A2B`) near the top, then the opening of "Hearthwalker" and a link to the Ash and Pine page. Email footers use Kit's shared mailing address, which keeps the author's residence private and meets CAN-SPAM. A test signup reached the Gmail inbox on October 24, 2026.
 
 Privacy: the site itself loads no scripts or trackers. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
 
