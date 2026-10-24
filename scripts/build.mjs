@@ -16,6 +16,10 @@ const safeUrl = value => { if (!/^https:\/\//.test(value)) throw new Error('Exte
 const assetPath = value => { if (!/^assets\/[a-zA-Z0-9/_.-]+$/.test(value) || value.includes('..')) throw new Error('Assets must be inside public/assets.'); return value; };
 const entries = site.journal.filter(entry => entry.published === true).sort((a,b) => b.date.localeCompare(a.date));
 const contactEnabled = Boolean(site.emailEnabled && site.email);
+// The newsletter signup posts straight to Kit; no script is involved.
+const letters = site.letters || {};
+const lettersEnabled = letters.enabled === true;
+if (lettersEnabled && !/^https:\/\/app\.kit\.com\/forms\/\d+\/subscriptions$/.test(letters.formAction || '')) throw new Error('Letters need a Kit form action: https://app.kit.com/forms/<id>/subscriptions');
 for (const collection of [site.books, entries]) {
   if (new Set(collection.map(item => item.slug)).size !== collection.length) throw new Error('Duplicate slug.');
   for (const item of collection) if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug)) throw new Error('Invalid content slug.');
@@ -59,6 +63,8 @@ const actions = (book, playlistHref=book.playlistUrl) => `<div class="actions">$
 // Each line is its own block so it never reflows into its neighbor; the <br>s keep
 // the breaks in reader modes and copied text.
 const verse = excerpt => `<figure class="verse"><blockquote class="verse-lines">${excerpt.lines.map(line => `<span class="verse-line">${esc(line)}</span><br>`).join('\n')}</blockquote><figcaption>-- from “${esc(excerpt.title)}”</figcaption></figure>`;
+const signup = id => `<form class="signup" action="${safeUrl(letters.formAction)}" method="post"><label class="label" for="${id}">Email address</label><div class="signup-row"><input class="signup-input" id="${id}" type="email" name="email_address" autocomplete="email" required><button class="button" type="submit">Subscribe</button></div><p class="signup-note">${esc(letters.note)}</p></form>`;
+const lettersBand = (id, heading, line) => lettersEnabled ? `<section class="band letters" aria-labelledby="${id}-title"><div class="shell"><div class="letters-inner"><p class="label">Letters</p><h2 id="${id}-title">${esc(heading)}</h2><p class="letters-line">${esc(line)}</p>${signup(`${id}-email`)}</div></div></section>` : '';
 const excerptBand = (book, id) => (book.excerpts || []).length ? `<section class="band excerpt-band" aria-labelledby="${id}"><div class="shell"><h2 class="label" id="${id}">From the book</h2>${book.excerpts.map(verse).join('')}</div></section>` : '';
 
 const personId = `${origin}/#author`;
@@ -79,6 +85,7 @@ async function page(route, title, description, active, render, {type='website', 
   const canonical = `${origin}/${route}`;
   const home = route === '';
   const nav = [['writing/','Writing'],['about/','About'], ...(entries.length ? [['journal/','Journal']] : []), ...(contactEnabled ? [['contact/','Contact']] : [])];
+  const footerNav = [...nav, ...(lettersEnabled ? [['letters/','Letters']] : [])];
   const data = schema || graph(website, person);
   const social = share || defaultShare;
   const html = `<!doctype html>
@@ -110,7 +117,7 @@ ${index ? '' : '<meta name="robots" content="noindex">'}
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="shell"><a class="wordmark" href="${href('')}"${home ? ' aria-current="page"' : ''}>${esc(site.name)}</a><nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main" tabindex="-1">${render(href)}</main>
-<footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${nav.map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
+<footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${footerNav.map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
 </body>
 </html>`;
   const filename = route === '404.html' ? '404.html' : `${route}index.html`;
@@ -126,6 +133,7 @@ await page('', `${site.name} · Poetry, Prose and Literary Fiction`, `${featured
 <section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>
 <section class="home-section home-novel" aria-labelledby="novel-title"><div class="shell home-novel-inner"><div class="home-novel-meta"><p class="label">${esc(novel.status)}</p><h2 id="novel-title"><a href="${href(bookUrl(novel))}">${esc(novel.title)}</a></h2><p class="book-subtitle">${esc(novel.subtitle)}</p></div>
 <div class="home-novel-copy"><p class="novel-line">${sentences(novel.tagline)}</p>${paragraphs(novel.description.slice(1,3))}<a class="text-link" href="${href(bookUrl(novel))}">About the novel ${arrow}</a></div></div></section>
+${lettersBand('home-letters', 'Letters from the fire', letters.deck)}
 <section class="home-section home-about" aria-labelledby="about-title"><div class="shell home-about-inner"><div class="home-portrait">${aboutPicture(href, '(max-width: 760px) min(56vw, 220px), 260px', false)}</div>
 <div class="home-about-copy"><p class="label">About</p><h2 id="about-title">${esc(site.name)}</h2><p class="lede">${esc(site.introduction)}</p><p>${esc(site.biography[1])}</p><a class="text-link" href="${href('about/')}">More about Andrew ${arrow}</a></div></div></section>`, {schema:graph(website, person, bookData(featured))});
 
@@ -151,11 +159,18 @@ ${excerptBand(book, 'excerpts-title')}${playlist}${praise}${more}</article>`;
 <header class="novel-heading"><p class="status">${esc(book.status)}</p><h1 id="book-title">${esc(book.title)}</h1><p class="book-subtitle">${esc(book.subtitle)}</p></header></div>
 <div class="night-band"><div class="shell"><p class="novel-tagline">${tagline}</p></div></div>
 <div class="shell"><div class="prose novel-body">${paragraphs(book.description)}</div></div>
-${excerptBand(book, 'excerpts-title')}${more}</article>`;
+${excerptBand(book, 'excerpts-title')}${lettersBand('novel-letters', `Hear when ${book.title} is ready`, 'Occasional letters from Andrew, with news of the novel as it takes shape.')}${more}</article>`;
   }, {schema:graph(bookData(book), person), share:social, type:published ? 'book' : 'website'});
 }
 
 if (contactEnabled) await page('contact/', `Contact · ${site.name}`, 'Professional correspondence with Andrew Grupp.', 'Contact', () => `<div class="shell page-content">${pageHeading('Correspondence')}<div class="contact-body prose"><p>For professional correspondence, please write to<br><a href="mailto:${esc(site.email)}">${esc(site.email)}</a>.</p></div></div>`);
+
+if (lettersEnabled) {
+  await page('letters/', `Letters · ${site.name}`, `Occasional letters from ${site.name}: new poems and essays, and news of Housefall.`, 'Letters', () => `<div class="shell page-content letters-page">${pageHeading('Letters', letters.deck)}<div class="prose">${paragraphs(letters.description)}</div>${signup('letters-email')}</div>`);
+  // Kit redirects here after signup and after the confirmation click. Neither is indexed.
+  await page('letters/thanks/', `Check your inbox · ${site.name}`, 'One more step to confirm your subscription.', 'Letters', href => `<div class="shell page-content">${pageHeading('Check your inbox')}<div class="prose"><p>One more step: open the email from ${esc(site.name)} and confirm your address. If it hasn’t arrived in a few minutes, look in your spam or promotions folder.</p></div><a class="text-link" href="${href('')}">Return home ${arrow}</a></div>`, {index:false});
+  await page('letters/confirmed/', `You’re on the list · ${site.name}`, 'Your subscription is confirmed.', 'Letters', href => `<div class="shell page-content">${pageHeading('You’re on the list')}<div class="prose"><p>Thank you. The next letter will find you. Until then, there’s room beside the fire.</p></div><a class="text-link" href="${href('writing/')}">Explore the writing ${arrow}</a></div>`, {index:false});
+}
 
 if (entries.length) {
   await page('journal/', `Journal · ${site.name}`, 'Essays, literary reflections, and excerpts by Andrew Grupp.', 'Journal', href => `<div class="shell page-content">${pageHeading('Journal')}${entries.map(entry => `<article class="journal-row"><time class="label" datetime="${esc(entry.date)}">${dateLabel(entry.date)}</time><h2><a href="${href(`journal/${entry.slug}/`)}">${esc(entry.title)}</a></h2><p>${esc(entry.summary)}</p></article>`).join('')}</div>`);
@@ -166,4 +181,4 @@ await page('404.html',`Page not found · ${site.name}`,'This page could not be f
 await writeFile(path.join(out,'.nojekyll'),'');
 await writeFile(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
 await writeFile(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(route=>`<url><loc>${origin}/${route}</loc></url>`).join('')}</urlset>\n`);
-console.log(`Built ${pages.length} pages + 404 at ${origin}. Contact: ${contactEnabled ? 'enabled' : 'hidden'}. Journal: ${entries.length} published entries.`);
+console.log(`Built ${pages.length} pages + 404 at ${origin}. Contact: ${contactEnabled ? 'enabled' : 'hidden'}. Letters: ${lettersEnabled ? 'enabled' : 'hidden'}. Journal: ${entries.length} published entries.`);

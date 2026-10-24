@@ -11,6 +11,16 @@
   ],
   "email": "hello@andrewgrupp.com",
   "emailEnabled": false,
+  "letters": {
+    "enabled": true,
+    "formAction": "https://app.kit.com/forms/10089306/subscriptions",
+    "deck": "Occasional letters from beside the fire.",
+    "description": [
+      "A few times a year, Andrew writes to readers: new poems and essays, notes from the road, and news of Housefall as it takes shape.",
+      "Subscribers are the first to hear when the novel is ready."
+    ],
+    "note": "A few letters a year. Your address is never shared. Unsubscribe anytime."
+  },
   "photograph": "assets/photography/andrew-grupp-monochrome-800.jpg",
   "photographBase": "assets/photography/andrew-grupp-monochrome",
   "photographWidths": [480, 800],
