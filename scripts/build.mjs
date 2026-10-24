@@ -7,7 +7,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'dist');
 const site = JSON.parse(await readFile(path.join(root, 'content/site.json'), 'utf8'));
 const styleVersion = createHash('sha256').update(await readFile(path.join(root,'public/assets/style.css'))).digest('hex').slice(0,12);
-const origin = (process.env.SITE_URL || 'https://hearthwalker.github.io/andrewgrupp.com').replace(/\/$/, '');
+const origin = (process.env.SITE_URL || 'https://andrewgrupp.com').replace(/\/$/, '');
 if (!/^https:\/\//.test(origin)) throw new Error('SITE_URL must be an absolute HTTPS URL.');
 // "/andrewgrupp.com/" on the project site, "/" at a domain root. Only the 404 page needs it.
 const basePath = new URL(`${origin}/`).pathname;
