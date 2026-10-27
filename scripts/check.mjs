@@ -6,6 +6,8 @@ const files = await walk(root);
 const pages = files.filter(f=>f.endsWith('.html'));
 const content=JSON.parse(await readFile('content/site.json','utf8'));
 const letters=content.letters||{};
+const cloudflareToken=content.analytics?.cloudflareToken;
+const analytics=cloudflareToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
 const errors=[];
 let checked=0;
 const siteBase = new URL((await readFile(path.join(root,'index.html'),'utf8')).match(/rel="canonical" href="([^"]+)/)[1]);
@@ -26,7 +28,9 @@ for(const file of pages){
   assert(/<nav[^>]+aria-label="Main navigation"/.test(html),'navigation landmark missing');
   assert(/property="og:url"/.test(html),'Open Graph URL missing');
   assert(/property="og:image" content="[^"]+"/.test(html),'Open Graph image missing');
-  assert(!/<script(?![^>]*application\/ld\+json)/.test(html),'unexpected client-side JavaScript');
+  const withoutAnalytics=analytics ? html.replace(analytics,'') : html;
+  assert(!/<script(?![^>]*application\/ld\+json)/.test(withoutAnalytics),'unexpected client-side JavaScript');
+  if(analytics)assert(html.split(analytics).length===2,'configured analytics beacon must appear exactly once');
   assert(!/href="#"/.test(html),'dead placeholder link');
   assert(html.split(aldric).length===2,'Aldric footer ornament altered, missing or duplicated');
   assert((html.match(/Aldric was here\./g)||[]).length===1,'"Aldric was here." must appear exactly once');
@@ -114,7 +118,24 @@ if(!home.includes(verseMarkup(ash.excerpts[0])))errors.push('Home: featured exce
 if(!content.invitation.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${esc(s)}</span>`)))errors.push('Home: invitation line missing');
 if(!/<title>Andrew Grupp · Poetry, Prose and Literary Fiction<\/title>/.test(home))errors.push('Homepage genre metadata missing');
 if(!home.includes(`href="${esc(ash.purchaseUrl)}"`) || !home.includes(`href="${esc(ash.playlistUrl)}"`))errors.push('Home: Amazon and playlist links required');
-if(/home-novel|home-about|class="[^"]*\bletters\b/.test(home))errors.push('Home: only the featured book and its excerpt belong here');
+if(/home-novel|home-about/.test(home))errors.push('Home: unrelated novel or biography sections must stay absent');
+if(ash.homeDescription && !home.includes(`<p class="hero-description">${esc(ash.homeDescription)}</p>`))errors.push('Home: book description missing');
+if(letters.enabled){
+  for(const [label,html,id,before] of [
+    ['Home',home,'home-letters','id="excerpt-title"'],
+    ['Ash and Pine',ashHtml,'book-letters','id="playlist"'],
+    ['Housefall',novelHtml,'novel-letters','class="prose novel-body"']
+  ]){
+    const section=html.indexOf(`aria-labelledby="${id}-title"`);
+    const form=html.indexOf(`id="${id}-email"`);
+    if(section<0 || form<section || html.indexOf(before)<0 || section<html.indexOf(before))errors.push(`${label}: Letters signup missing or out of order`);
+  }
+}
+for(const [label,html] of [['Home',home],['Ash and Pine',ashHtml]]){
+  if(!html.includes(`href="${esc(ash.purchaseUrl)}">${esc(ash.purchaseLabel)}</a>`))errors.push(`${label}: paperback purchase button missing`);
+  if(ash.kindleUrl && !html.includes(`href="${esc(ash.kindleUrl)}">${esc(ash.kindleLabel)}</a>`))errors.push(`${label}: Kindle purchase button missing`);
+  if(ash.kindleUrl && ash.kindleUnlimited && !html.includes('Free to read on Kindle Unlimited'))errors.push(`${label}: Kindle Unlimited note missing`);
+}
 if(!ash.cover || !ash.coverSource || !ashHtml.includes(`src="../../${ash.cover}"`))errors.push('Approved Ash and Pine front cover must be rendered');
 if(!ash.coverAlt || !ashHtml.includes(`width="${ash.coverWidth}" height="${ash.coverHeight}"`))errors.push('Cover alt text or dimensions missing');
 if(Math.abs(ash.coverWidth/ash.coverHeight-5.5/8.5)>.002)errors.push('Front-cover aspect ratio does not match approved print trim');

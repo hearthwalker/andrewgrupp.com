@@ -19,6 +19,9 @@ const contactEnabled = Boolean(site.emailEnabled && site.email);
 // The newsletter signup posts straight to Kit; no script is involved.
 const letters = site.letters || {};
 const lettersEnabled = letters.enabled === true;
+const cloudflareToken = site.analytics?.cloudflareToken;
+if (cloudflareToken != null && !/^[a-f0-9]{32}$/.test(cloudflareToken)) throw new Error('Cloudflare Web Analytics needs the 32-character site token from its beacon snippet.');
+const analytics = cloudflareToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
 if (lettersEnabled && !/^https:\/\/app\.kit\.com\/forms\/\d+\/subscriptions$/.test(letters.formAction || '')) throw new Error('Letters need a Kit form action: https://app.kit.com/forms/<id>/subscriptions');
 for (const collection of [site.books, entries]) {
   if (new Set(collection.map(item => item.slug)).size !== collection.length) throw new Error('Duplicate slug.');
@@ -60,7 +63,7 @@ const portraitPicture = (href, sizes, eager) => picture(href, {base:site.photogr
 // The author photo for About and the homepage teaser; falls back to the square portrait.
 const aboutPhoto = site.aboutPhotograph ? {image:site.aboutPhotograph, width:site.aboutPhotographWidth, height:site.aboutPhotographHeight, alt:site.aboutPhotographAlt} : {image:site.photograph, width:800, height:800, alt:site.photographAlt};
 const aboutPicture = (href, sizes, eager=true) => site.aboutPhotograph ? picture(href, {base:site.aboutPhotographBase, widths:site.aboutPhotographWidths, fallback:site.aboutPhotograph, width:site.aboutPhotographWidth, height:site.aboutPhotographHeight, alt:site.aboutPhotographAlt, sizes, eager}) : portraitPicture(href, sizes, eager);
-const actions = (book, playlistHref=book.playlistUrl) => `<div class="actions">${book.purchaseUrl ? `<a class="button" href="${safeUrl(book.purchaseUrl)}">${esc(book.purchaseLabel || 'Buy the book')}</a>` : ''}${book.playlistUrl ? `<a class="text-link" href="${playlistHref.startsWith('#') ? playlistHref : safeUrl(playlistHref)}">Listen to the playlist ${arrow}</a>` : ''}</div>`;
+const actions = (book, playlistHref=book.playlistUrl) => `<div class="actions">${book.kindleUrl ? `<div class="purchase-format"><a class="button" href="${safeUrl(book.kindleUrl)}">${esc(book.kindleLabel || 'Kindle')}</a>${book.kindleUnlimited ? '<p class="format-note">Free to read on Kindle Unlimited</p>' : ''}</div>` : ''}${book.purchaseUrl ? `<div class="purchase-format"><a class="button" href="${safeUrl(book.purchaseUrl)}">${esc(book.purchaseLabel || 'Buy the book')}</a></div>` : ''}${book.playlistUrl ? `<a class="text-link" href="${playlistHref.startsWith('#') ? playlistHref : safeUrl(playlistHref)}">Listen to the playlist ${arrow}</a>` : ''}</div>`;
 // Each line is its own block so it never reflows into its neighbor; the <br>s keep
 // the breaks in reader modes and copied text.
 const verse = excerpt => `<figure class="verse"><blockquote class="verse-lines">${excerpt.lines.map(line => `<span class="verse-line">${esc(line)}</span><br>`).join('\n')}</blockquote><figcaption>-- from “${esc(excerpt.title)}”</figcaption></figure>`;
@@ -119,6 +122,7 @@ ${index ? '' : '<meta name="robots" content="noindex">'}
 <header class="site-header"><div class="shell"><a class="wordmark" href="${href('')}"${home ? ' aria-current="page"' : ''}>${esc(site.name)}</a><nav class="site-nav" aria-label="Main navigation">${nav.map(([url,label]) => `<a href="${href(url)}"${active===label ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
 <main id="main" tabindex="-1">${render(href)}</main>
 <footer class="site-footer"><div class="shell footer-inner"><p class="footer-credit"><span>© 2026 ${esc(site.name)}</span> <span class="footer-place">· Nebraska, United States</span></p><nav aria-label="Footer navigation">${footerNav.map(([url,label])=>`<a href="${href(url)}">${label}</a>`).join('')}</nav>${aldric}</div></footer>
+${analytics}
 </body>
 </html>`;
   const filename = route === '404.html' ? '404.html' : `${route}index.html`;
@@ -129,9 +133,9 @@ ${index ? '' : '<meta name="robots" content="noindex">'}
 
 await page('', `${site.name} · Poetry, Prose and Literary Fiction`, `${featured.title}: ${featured.subtitle}, by ${site.name}. ${featured.heroLine}`, 'Home', href => `<section class="hero" aria-labelledby="hero-title"><div class="shell hero-inner">
 <a class="hero-cover cover" href="${href(bookUrl(featured))}">${coverPicture(href, featured, '(max-width: 760px) min(60vw, 250px), 400px', true)}</a>
-<div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${esc(featured.heroLine)}</p>${actions(featured)}</div>
+<div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${esc(featured.heroLine)}</p>${featured.homeDescription ? `<p class="hero-description">${esc(featured.homeDescription)}</p>` : ''}${actions(featured)}</div>
 </div></section>
-<section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>`, {schema:graph(website, person, bookData(featured))});
+<section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0])}<p class="invitation">${sentences(site.invitation)}</p></div></section>${lettersBand('home-letters', letters.invitation, letters.invitationDetail)}`, {schema:graph(website, person, bookData(featured))});
 
 await page('writing/', `Writing · ${site.name}`, 'Published work and literary fiction in progress by Andrew Grupp, including Ash and Pine and Housefall.', 'Writing', href => `<div class="shell page-content">${pageHeading('Writing','Books and works in progress.')}<ul class="shelf" role="list">${site.books.map(book => `<li><a class="shelf-link" href="${href(bookUrl(book))}"><div class="shelf-stand">${book.cover ? `<div class="cover">${coverPicture(href, book, '(max-width: 600px) calc(50vw - 40px), 250px', true)}</div>` : `<div class="type-cover" aria-hidden="true"><span><span class="type-cover-title">${esc(book.title)}</span><span class="type-cover-rule"></span></span><span class="type-cover-status">${esc(book.status)}</span></div>`}</div><div class="shelf-caption"><p class="label">${esc(book.status)}</p><h2 class="shelf-title">${esc(book.title)}</h2><p class="shelf-subtitle">${esc(book.subtitle)}</p></div></a></li>`).join('')}</ul></div>`);
 
@@ -149,7 +153,7 @@ for (const book of site.books) {
     if (published) return `<article aria-labelledby="book-title"><div class="shell"><a class="back-link" href="${href('writing/')}">← All writing</a>
 <div class="book-hero"><div class="book-cover-col"><div class="cover">${coverPicture(href, book, '(max-width: 760px) min(60vw, 250px), 360px', true)}</div></div><div class="book-hero-copy"><header><p class="label">${esc(book.status)}</p><h1 id="book-title">${esc(book.title)}</h1><p class="hero-subtitle">${esc(book.subtitle)}</p>${actions(book, '#playlist')}</header>
 <div class="prose book-description">${paragraphs(book.description)}</div></div></div></div>
-${excerptBand(book, 'excerpts-title')}${playlist}${praise}${more}</article>`;
+${excerptBand(book, 'excerpts-title')}${playlist}${lettersBand('book-letters', letters.invitation, letters.invitationDetail)}${praise}${more}</article>`;
     const tagline = sentences(book.tagline);
     return `<article aria-labelledby="book-title"><div class="shell"><a class="back-link" href="${href('writing/')}">← All writing</a>
 <header class="novel-heading"><p class="status">${esc(book.status)}</p><h1 id="book-title">${esc(book.title)}</h1><p class="book-subtitle">${esc(book.subtitle)}</p></header></div>

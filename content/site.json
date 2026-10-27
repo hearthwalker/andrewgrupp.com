@@ -12,10 +12,15 @@
   ],
   "email": "inquiries@andrewgrupp.com",
   "emailEnabled": true,
+  "analytics": {
+    "cloudflareToken": null
+  },
   "letters": {
     "enabled": true,
     "formAction": "https://app.kit.com/forms/10089306/subscriptions",
     "deck": "Occasional dispatches from beside the fire.",
+    "invitation": "Not ready for the book? Pull up a chair anyway.",
+    "invitationDetail": "A few letters a year, and you'll be first to hear when Housefall is ready.",
     "description": [
       "Sent a few times a year: new essays and poems, notes from the road, and updates on Housefall as the novel takes shape. Subscribers will be the first to know when it is ready."
     ],
@@ -60,6 +65,7 @@
         "Come sit awhile. There's room beside the fire. May none cross winter left behind."
       ],
       "heroLine": "Poems and essays from the road, the lakeshore and the long winters between.",
+      "homeDescription": "About a daughter never held and children 800 miles away. About a God who didn't show. And a fire that stayed lit anyway.",
       "excerpts": [
         {
           "title": "Hearthwalker",
@@ -80,7 +86,10 @@
       "coverAlt": "Cover of Ash and Pine: A Collection of Prose and Poetry by Andrew Grupp. A black-and-white photograph of spruce and beetle-killed snags in fog along a mountain meadow road.",
       "coverSource": "Ash_and_Pine_COVER_FINAL.pdf",
       "purchaseUrl": "https://www.amazon.com/dp/B0HN6P7XNH",
-      "purchaseLabel": "Buy on Amazon",
+      "purchaseLabel": "Paperback $15",
+      "kindleUrl": "https://www.amazon.com/dp/B0HP4P8296",
+      "kindleLabel": "Kindle $3.99",
+      "kindleUnlimited": true,
       "playlistUrl": "https://open.spotify.com/playlist/30BQHSBfjqc9lTErFWJiLp"
     },
     {

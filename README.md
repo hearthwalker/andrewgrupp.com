@@ -1,6 +1,6 @@
 # Andrew Grupp
 
-The official literary-author website for Andrew Grupp. A small static site for GitHub Pages, with self-hosted typefaces, no client-side JavaScript, no tracking, and no production dependencies.
+The official literary-author website for Andrew Grupp. A small static site for GitHub Pages, with self-hosted typefaces and no production dependencies. Signup forms work without JavaScript. Optional Cloudflare Web Analytics loads only when a site token is configured.
 
 ## Local development
 
@@ -20,12 +20,13 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `inquiries@andrewgrupp.com` forwards to the author's inbox and is published on the Contact page (`emailEnabled: true`). `hello@andrewgrupp.com` remains active for Kit. Setting `emailEnabled` to `false` removes the page and its links.
-- **Letters (email list):** `letters` holds the Kit signup (live). A signup band appears on the Housefall page and `/letters/`, and Letters is in the navigation. Each is a plain HTML form posting to Kit, with no JavaScript. `deck`, `description` and `note` are the copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
-- **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, purchase button, playlist link and first excerpt. The `invitation` line closes the excerpt band, and the homepage ends there; Housefall, About and Letters are reached from the navigation. The Writing page shelves the entire bibliography.
+- **Letters (email list):** `letters` holds the Kit signup. A signup band appears beneath the homepage excerpt, beneath the Ash and Pine playlist, on Housefall and on `/letters/`. Each is a plain HTML form posting to Kit, with no JavaScript. `invitation` and `invitationDetail` supply the new bands; `deck`, `description` and `note` supply the other copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
+- **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, `homeDescription`, format purchase buttons, playlist link and first excerpt. The `invitation` line closes the excerpt band, followed by Letters signup. Housefall and About are reached from the navigation. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Excerpts:** each book's `excerpts` is a list of `{ "title": "...", "lines": ["...", "..."] }`. Every string in `lines` is one line of verse, kept whole; long lines turn over with a hanging indent on phones. An empty list (Housefall today) renders nothing.
 - **Praise:** each book's `praise` is a list of `{ "quote": "...", "source": "..." }`. The block appears only when the list has entries. Add real, attributable praise only.
-- **Purchase and playlist:** use the confirmed HTTPS URLs in `purchaseUrl` and `playlistUrl`; `null` hides the link. `purchaseLabel` is the button text. A Spotify playlist URL also produces the lazy-loaded official Spotify player on the book page.
+- **Purchase and playlist:** `purchaseUrl` is the paperback listing and `kindleUrl` is the ebook listing; `null` hides the respective link. `purchaseLabel` and `kindleLabel` include the prices; update those labels if prices change. `kindleUnlimited: true` adds the Unlimited note beneath the Kindle button. A confirmed `playlistUrl` also produces the lazy-loaded official Spotify player on the book page.
+- **Analytics:** set `analytics.cloudflareToken` to the public 32-character site token from Cloudflare Web Analytics. `null` omits the beacon entirely. No DNS or hosting migration is needed. See [the readership checklist](docs/READERSHIP.md) for activation and account-side follow-ups.
 - **Actual cover:** Ash and Pine's approved front cover is required by the build. Its local image paths (`cover` is the JPEG fallback; `coverBase` and `coverWidths` name the WebP/JPEG sizes), dimensions, alt text, source record, and publication date live with its book entry. See [cover provenance](docs/COVER.md) before replacing it.
 - **Author photograph:** `photograph` is the JPEG fallback and Open Graph image; `photographBase` and `photographWidths` name the responsive WebP/JPEG sizes. It appears on About. Strip private EXIF/location metadata before adding it; `python scripts/portrait-webp.py` makes metadata-free WebP copies.
 - **Landscapes:** source photography and public derivatives are retained for future editorial use and are not rendered.

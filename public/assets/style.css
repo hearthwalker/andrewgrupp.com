@@ -52,8 +52,11 @@ main:focus{outline:none}
 .site-nav a{text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
 .site-nav a[aria-current=page],.site-nav a:hover{color:inherit;border-color:var(--ember)}
 
-/* Links and the one button */
-.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 30px;margin-top:34px}
+/* Purchase formats and links */
+.actions{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 20px;margin-top:34px}
+.purchase-format{max-width:100%}
+.format-note{max-width:24ch;font-size:15px;line-height:1.45;color:var(--soft);margin:10px 0 0}
+.actions>.text-link{flex-basis:100%;width:fit-content;max-width:fit-content}
 .button{display:inline-block;background:var(--ember);color:var(--on-ember);font-size:18px;line-height:1.2;padding:15px 28px 16px;border-radius:2px;text-decoration:none;transition:background-color .3s ease}
 .button:hover{background:var(--ember-deep);color:var(--on-ember)}
 .text-link{display:inline-block;font-size:17px;text-decoration:none;border-bottom:1px solid var(--ember);padding:6px 0 4px}
@@ -69,6 +72,7 @@ main:focus{outline:none}
 .hero h1,.book-hero h1{font-size:clamp(50px,6.4vw,86px);line-height:1}
 .hero-subtitle{font-style:italic;font-size:22px;line-height:1.5;color:var(--soft);margin:16px 0 0}
 .hero-line{font-size:21px;line-height:1.65;max-width:36ch;margin:26px 0 0;text-wrap:pretty}
+.hero-description{font-size:19px;line-height:1.65;max-width:40ch;margin:16px 0 0;text-wrap:pretty}
 .prose p{text-wrap:pretty}
 
 /* Verse: each line kept whole; long lines turn over with a hanging indent. */
@@ -169,6 +173,7 @@ main:focus{outline:none}
 
 /* Letters: a plain form that posts to the mailing-list provider. */
 .letters-inner{max-width:34rem;margin-inline:auto;text-align:center}
+.excerpt-band+.letters{background:var(--paper)}
 .letters h2{font-size:clamp(38px,4vw,52px)}
 .letters-line{font-style:italic;font-size:20px;color:var(--soft);margin:14px 0 0;text-wrap:balance}
 .signup{max-width:30rem;margin:36px auto 0;text-align:left}
@@ -224,6 +229,8 @@ button.button{border:0;font-family:inherit;cursor:pointer}
   .book-hero-copy{padding-top:0}
   .book-description{text-align:left;margin-inline:auto}
   .hero-line{margin-inline:auto;font-size:19px}
+  .hero-description{margin-inline:auto;font-size:18px}
+  .format-note{margin-inline:auto}
   .hero-subtitle{font-size:20px;margin-top:12px}
   .hero .actions,.book-hero .actions{justify-content:center;gap:14px 26px;margin-top:28px}
   .book-hero{gap:30px;text-align:center;padding-top:16px}
