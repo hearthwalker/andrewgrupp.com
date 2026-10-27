@@ -40,7 +40,7 @@ The supplied photo originals are retained locally in the ignored `reference-asse
 
 Contact is generated and linked only when both `email` and `emailEnabled` are set. Journal is generated only when published entries exist. Until then, neither page appears in navigation or the sitemap. The footer contains no inactive correspondence link.
 
-Book metadata lives with each book. Housefall is historical fiction in progress, with no implied release date.
+Book metadata lives with each book. Housefall is forthcoming historical fiction, coming early 2027. Its `year` remains `null` until publication so it uses the forthcoming-book layout; the release window lives in `status`, not an invented exact publication date.
 
 ## Publish a journal entry
 
