@@ -189,7 +189,8 @@ button.button{border:0;font-family:inherit;cursor:pointer}
 /* The public introduction reads as a letter; subscription follows the sign-off. */
 .letter,.letter-subscribe{max-width:65ch;margin-inline:auto}
 .letter-heading{padding:clamp(40px,6vw,72px) 0 32px}
-.letter-heading h1{font-size:clamp(44px,5vw,60px)}
+.letter-heading h1{display:flex;align-items:center;gap:.22em;font-size:clamp(44px,5vw,60px)}
+.letters-author-mark{display:block;flex:none;width:.42em;height:.82em;background:var(--ink);-webkit-mask:url('./identity/spruce-small.svg') center/contain no-repeat;mask:url('./identity/spruce-small.svg') center/contain no-repeat}
 .letter-date{display:block;font-size:16px;font-style:italic;color:var(--soft);margin-top:18px}
 .letter-body{line-height:1.8}
 .letter-body>p{margin-bottom:1.3em}
