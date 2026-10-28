@@ -56,7 +56,7 @@ main:focus{outline:none}
 .actions{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 20px;margin-top:34px}
 .purchase-format{max-width:100%}
 .format-note{max-width:24ch;font-size:15px;line-height:1.45;color:var(--soft);margin:10px 0 0}
-.actions>.text-link{flex-basis:100%;width:fit-content;max-width:fit-content}
+.action-links{display:flex;flex-wrap:wrap;justify-content:inherit;align-items:baseline;gap:12px 24px;flex-basis:100%}
 .button{display:inline-block;background:var(--ember);color:var(--on-ember);font-size:18px;line-height:1.2;padding:15px 28px 16px;border-radius:2px;text-decoration:none;transition:background-color .3s ease}
 .button:hover{background:var(--ember-deep);color:var(--on-ember)}
 .text-link{display:inline-block;font-size:17px;text-decoration:none;border-bottom:1px solid var(--ember);padding:6px 0 4px}
