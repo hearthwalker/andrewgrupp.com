@@ -113,8 +113,14 @@ const novelHtml=await read('writing/housefall/index.html');
 const verseMarkup = excerpt => excerpt.lines.map(line=>`<span class="verse-line">${esc(line)}</span><br>`).join('\n');
 for(const excerpt of ash.excerpts){
   if(!ashHtml.includes(verseMarkup(excerpt)))errors.push(`Ash and Pine: excerpt "${excerpt.title}" line breaks not preserved`);
+  if(!ashHtml.includes(`<figcaption>-- from “${esc(excerpt.title)}”</figcaption>`))errors.push('Ash and Pine: poem title must retain quotation marks');
 }
 if(!home.includes(verseMarkup(ash.excerpts[0])))errors.push('Home: featured excerpt line breaks not preserved');
+if(!home.includes(`<figcaption>-- from “${esc(ash.excerpts[0].title)}”</figcaption>`))errors.push('Home: poem title must retain quotation marks');
+for(const excerpt of novel.excerpts){
+  if(!novelHtml.includes(verseMarkup(excerpt)))errors.push('Housefall: excerpt text or line breaks missing');
+  if(!novelHtml.includes(`<figcaption>-- from <em>${esc(excerpt.title)}</em></figcaption>`))errors.push('Housefall: novel title must be italic without quotation marks');
+}
 if(!content.invitation.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${esc(s)}</span>`)))errors.push('Home: invitation line missing');
 if(!/<title>Andrew Grupp · Poetry, Prose and Literary Fiction<\/title>/.test(home))errors.push('Homepage genre metadata missing');
 if(!home.includes(`href="${esc(ash.purchaseUrl)}"`) || !home.includes(`href="${esc(ash.playlistUrl)}"`))errors.push('Home: Amazon and playlist links required');

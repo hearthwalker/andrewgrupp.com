@@ -95,6 +95,7 @@
     {
       "slug": "housefall",
       "title": "Housefall",
+      "form": "novel",
       "subtitle": "A literary historical novel",
       "category": "Historical fiction",
       "status": "Coming early 2027",
@@ -106,7 +107,7 @@
         "Marek opens the door.",
         "Housefall is a literary historical novel about the uneasy distance between love and loyalty, the wounds we inflict upon those we cherish, and what remains of a life when its foundations give way."
       ],
-      "excerpts": [],
+      "excerpts": [{"title": "Housefall", "lines": ["Grief is a poor horse.", "It carries badly."]}],
       "praise": [],
       "shareImage": "assets/social-card-housefall.jpg",
       "shareImageAlt": "Housefall, a novel by Andrew Grupp. Coming early 2027. The hall still stands. Everything that made it a home is gone.",
