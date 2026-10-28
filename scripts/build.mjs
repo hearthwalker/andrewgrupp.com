@@ -131,9 +131,10 @@ ${analytics}
   if (index) pages.push(route);
 }
 
+const heroLine = featured.heroLine.split(/(?<=,)\s+/).map(phrase => `<span>${esc(phrase)}</span>`).join(' ');
 await page('', `${site.name} · Poetry, Prose and Literary Fiction`, `${featured.title}: ${featured.subtitle}, by ${site.name}. ${featured.heroLine}`, 'Home', href => `<section class="hero" aria-labelledby="hero-title"><div class="shell hero-inner">
 <a class="hero-cover cover" href="${href(bookUrl(featured))}">${coverPicture(href, featured, '(max-width: 760px) min(60vw, 250px), 400px', true)}</a>
-<div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${esc(featured.heroLine)}</p>${featured.homeDescription ? `<p class="hero-description">${esc(featured.homeDescription)}</p>` : ''}${actions(featured)}</div>
+<div class="hero-copy"><p class="label">${esc(featured.status)}</p><h1 id="hero-title">${esc(featured.title)}</h1><p class="hero-subtitle">${esc(featured.subtitle)}</p><p class="hero-line">${heroLine}</p>${featured.homeDescription ? `<p class="hero-description">${esc(featured.homeDescription)}</p>` : ''}${actions(featured)}</div>
 </div></section>
 <section class="band excerpt-band" aria-labelledby="excerpt-title"><div class="shell"><h2 class="label" id="excerpt-title">From the book</h2>${verse(featured.excerpts[0], featured)}<p class="invitation">${sentences(site.invitation)}</p></div></section>${lettersBand('home-letters', letters.invitation, letters.invitationDetail)}`, {schema:graph(website, person, bookData(featured))});
 

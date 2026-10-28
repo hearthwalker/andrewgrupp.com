@@ -71,8 +71,9 @@ main:focus{outline:none}
 .hero-cover{justify-self:end;width:min(100%,400px)}
 .hero h1,.book-hero h1{font-size:clamp(50px,6.4vw,86px);line-height:1}
 .hero-subtitle{font-style:italic;font-size:22px;line-height:1.5;color:var(--soft);margin:16px 0 0}
-.hero-line{font-size:21px;line-height:1.65;max-width:36ch;margin:26px 0 0;text-wrap:pretty}
-.hero-description{font-size:19px;line-height:1.65;max-width:40ch;margin:16px 0 0;text-wrap:pretty}
+.hero-line{font-size:21px;line-height:1.65;margin:26px 0 0;text-wrap:balance}
+.hero-line span{display:inline-block;max-width:100%;vertical-align:top}
+.hero-description{font-size:19px;line-height:1.65;margin:16px 0 0;text-wrap:balance}
 .prose p{text-wrap:pretty}
 
 /* Verse: each line kept whole; long lines turn over with a hanging indent. */
@@ -230,6 +231,7 @@ button.button{border:0;font-family:inherit;cursor:pointer}
   .book-hero-copy{padding-top:0}
   .book-description{text-align:left;margin-inline:auto}
   .hero-line{margin-inline:auto;font-size:19px}
+  .hero-line span{display:inline}
   .hero-description{margin-inline:auto;font-size:18px}
   .format-note{margin-inline:auto}
   .hero-subtitle{font-size:20px;margin-top:12px}
