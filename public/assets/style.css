@@ -185,7 +185,20 @@ main:focus{outline:none}
 .signup-input:focus-visible{outline-offset:2px}
 button.button{border:0;font-family:inherit;cursor:pointer}
 .signup-note{font-size:16px;line-height:1.5;color:var(--soft);margin:12px 0 0}
-.letters-page .signup{margin:44px 0 0}
+/* The public introduction reads as a letter; subscription follows the sign-off. */
+.letter,.letter-subscribe{max-width:65ch;margin-inline:auto}
+.letter-heading{padding:clamp(40px,6vw,72px) 0 32px}
+.letter-heading h1{font-size:clamp(44px,5vw,60px)}
+.letter-date{display:block;font-size:16px;font-style:italic;color:var(--soft);margin-top:18px}
+.letter-body{line-height:1.8}
+.letter-body>p{margin-bottom:1.3em}
+.letter-excerpt{margin:24px 0 32px;padding-left:20px;border-left:1px solid var(--ember)}
+.letter-excerpt p{margin:0}
+.letter-signature{font-style:italic;margin:32px 0 0}
+.letter-subscribe{margin-top:clamp(48px,6vw,72px);padding-top:32px;border-top:1px solid var(--line)}
+.letter-subscribe h2{font-size:28px}
+.letter-subscribe-invitation{font-size:18px;line-height:1.7;color:var(--soft);margin:12px 0 0}
+.letter-subscribe .signup{max-width:none;margin:24px 0 0}
 
 /* Footer: kept dark and small. The ornament below is unchanged in look. */
 .site-footer{background:var(--night);color:var(--night-text)}

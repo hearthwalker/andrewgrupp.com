@@ -1,3 +1,13 @@
+# Letters introduction -- October 27, 2026
+
+The approved public introduction is published at `/letters/`, without an issue number. Its nine paragraphs were compared verbatim with the author's commission, including punctuation, the Housefall excerpt, "Bring snacks." and the sign-off. The existing Kit action, email field, confirmation pages and all other site content remain unchanged; only the shared stylesheet version changes on other generated pages.
+
+The letter uses the existing Source Serif and Cormorant fonts in a 65ch column, a restrained heading and dateline, a small italic excerpt with an ember rule, and a separate subscription invitation after the signature. No photography, client scripts, dependencies or animations were added.
+
+Browser QA covered 1440px, 768px and 390px in both existing palettes, with no horizontal overflow and exactly one form. Temporary local copies forced the existing light/dark color variables for review; those copies are excluded from the final build. Body and secondary text contrast range from 6.02:1 to 12.75:1. Desktop and phone checks confirmed native email validation, and keyboard Tab reaches Subscribe. No subscriber was created and no email was sent. Kit delivery was not retested.
+
+`node scripts/build.mjs` and `node scripts/check.mjs` pass. Local screenshots, comparison hashes and layout metrics are retained in the ignored `artifacts/letters-introduction/` directory.
+
 # Composition refinement, v5 - October 21, 2026
 
 The homepage header now contains right-aligned navigation without the AG monogram. Interior pages retain their text wordmark. The visible hero genre line is removed; the exact approved introduction remains its only descriptive sentence. Genre information remains in the document/OG title and social-image alt metadata. The content data file, book assets, Books band, footer and Aldric markup are unchanged.

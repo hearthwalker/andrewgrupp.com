@@ -99,6 +99,19 @@ if(!content.emailEnabled && files.some(f=>path.relative(root,f).startsWith('cont
 const read = route => readFile(path.join(root,route),'utf8');
 if(!letters.enabled && files.some(f=>path.relative(root,f).startsWith('letters'+path.sep)))errors.push('Inactive Letters pages must not be generated');
 if(letters.enabled){
+  const introduction=letters.introduction;
+  const lettersHtml=await read('letters/index.html');
+  if(introduction){
+    const letterMarkup=lettersHtml.match(/<article class="letter"[^>]*>([\s\S]*?)<\/article>/)?.[1]||'';
+    const actual=[...letterMarkup.matchAll(/<p(?: class="letter-signature")?>([\s\S]*?)<\/p>/g)].map(match=>match[1].replace(/<\/?em>/g,''));
+    const expected=[...introduction.paragraphs,introduction.excerpt,...introduction.closing,introduction.signature].map(esc);
+    if(JSON.stringify(actual)!==JSON.stringify(expected))errors.push('Letters introduction: wording, punctuation or paragraph breaks changed');
+    if(!letterMarkup.includes(`<time class="letter-date" datetime="${esc(introduction.date)}">`))errors.push('Letters introduction: dateline missing');
+    if(!letterMarkup.includes(`<blockquote class="letter-excerpt"><p><em>${esc(introduction.excerpt)}</em></p></blockquote>`))errors.push('Letters introduction: excerpt formatting missing');
+    if(!letterMarkup.includes('Bring snacks.'))errors.push('Letters introduction: Bring snacks. must stay');
+    if(lettersHtml.indexOf('<form class="signup"')<lettersHtml.indexOf('</article>'))errors.push('Letters signup must follow the complete letter');
+    if((lettersHtml.match(/<form\b/g)||[]).length!==1)errors.push('Letters must retain exactly one signup form');
+  }
   for(const route of ['letters/index.html','letters/thanks/index.html','letters/confirmed/index.html'])try{await stat(path.join(root,route))}catch{errors.push(`Letters: ${route} missing`)}
   const sitemap=await read('sitemap.xml');
   if(!sitemap.includes('/letters/</loc>') || sitemap.includes('/letters/thanks/') || sitemap.includes('/letters/confirmed/'))errors.push('Letters: only the signup page belongs in the sitemap');
