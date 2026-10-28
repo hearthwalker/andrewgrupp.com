@@ -186,6 +186,7 @@ main:focus{outline:none}
 .signup-input:focus-visible{outline-offset:2px}
 button.button{border:0;font-family:inherit;cursor:pointer}
 .signup-note{font-size:16px;line-height:1.5;color:var(--soft);margin:12px 0 0}
+.letter-sample-link{display:inline-block;margin-top:18px;font-size:16px}
 /* The public introduction reads as a letter; subscription follows the sign-off. */
 .letter,.letter-subscribe{max-width:65ch;margin-inline:auto}
 .letter-heading{padding:clamp(40px,6vw,72px) 0 32px}
@@ -212,6 +213,7 @@ button.button{border:0;font-family:inherit;cursor:pointer}
 .site-footer :focus-visible{outline-color:var(--night-text)}
 .footer-credit span{display:inline-block}
 .footer-place{color:var(--night-soft)}
+.footer-place::before{content:"· "}
 /* Native disclosure gives the ornament keyboard and touch behavior without JS. */
 .aldric{position:relative;grid-column:3;grid-row:1;justify-self:end;width:44px;height:44px;margin-right:-7px;color:#c3b19a}
 .aldric summary{display:flex;align-items:center;justify-content:center;width:44px;height:44px;cursor:pointer;list-style:none;border-radius:2px}
@@ -262,6 +264,7 @@ button.button{border:0;font-family:inherit;cursor:pointer}
   .aldric{grid-column:2;grid-row:2}
   .footer-inner{font-size:13px}
   .footer-place{display:block;white-space:nowrap}
+  .footer-place::before{content:none}
   .book-bottom{font-size:17px}
 }
 @media(max-width:600px){

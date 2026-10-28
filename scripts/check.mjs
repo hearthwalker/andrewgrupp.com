@@ -12,6 +12,7 @@ const errors=[];
 let checked=0;
 const siteBase = new URL((await readFile(path.join(root,'index.html'),'utf8')).match(/rel="canonical" href="([^"]+)/)[1]);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const prose = value => esc(String(value).replace(/'/g, '’').replace(/"/g, (quote, index, text) => index === 0 || /[\s([{—–-]/.test(text[index - 1]) ? '“' : '”'));
 // The footer ornament is protected: it must survive byte for byte on every page.
 const aldric = `<details class="aldric"><summary aria-label="Aldric, a small goat ornament"><svg viewBox="0 0 42 32" width="30" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 13 5 9 2 8 3 12 7 16 8 23 6 30h4l3-8h10l2 8h4l-1-10 4-5 5-1 3-4-5-2-1-3-3 3-3-1-3 6H14Z"/><path fill="currentColor" d="m31 9-1-4-3-3-2 1 3 4 1 4Zm3-1 1-4-1-4-2 1 1 4-2 4ZM34 14l-2 5-3-4Z"/></svg></summary><span class="aldric-note">Aldric was here.</span></details>`;
 for(const file of pages){
@@ -39,6 +40,8 @@ for(const file of pages){
   assert(!html.includes('—') && !html.includes('&mdash;'),'em dash found; house style uses --');
   const readable=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'').replace(/<[^>]*>/g,' ').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replaceAll('&quot;','"').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');
   assert(!readable.includes('&'),'unnecessary ampersand in literary copy or title');
+  assert(!readable.includes("'"),'straight apostrophe found in visible text');
+  assert(!readable.includes('"'),'straight double quote found in visible text');
   assert(!/Ash\s*(?:&|&amp;)\s*Pine/i.test(html),'incorrect published book title');
   if(!content.emailEnabled)assert(!/href="[^"]*contact\//.test(html),'inactive contact promoted');
   if(!letters.enabled)assert(!/<form\b/.test(html) && !/href="[^"]*letters\//.test(html),'inactive letters signup promoted');
@@ -104,10 +107,10 @@ if(letters.enabled){
   if(introduction){
     const letterMarkup=lettersHtml.match(/<article class="letter"[^>]*>([\s\S]*?)<\/article>/)?.[1]||'';
     const actual=[...letterMarkup.matchAll(/<p(?: class="letter-signature")?>([\s\S]*?)<\/p>/g)].map(match=>match[1].replace(/<\/?em>/g,''));
-    const expected=[...introduction.paragraphs,introduction.excerpt,...introduction.closing,introduction.signature].map(esc);
+    const expected=[...introduction.paragraphs,introduction.excerpt,...introduction.closing,introduction.signature].map(prose);
     if(JSON.stringify(actual)!==JSON.stringify(expected))errors.push('Letters introduction: wording, punctuation or paragraph breaks changed');
     if(!letterMarkup.includes(`<time class="letter-date" datetime="${esc(introduction.date)}">`))errors.push('Letters introduction: dateline missing');
-    if(!letterMarkup.includes(`<blockquote class="letter-excerpt"><p><em>${esc(introduction.excerpt)}</em></p></blockquote>`))errors.push('Letters introduction: excerpt formatting missing');
+    if(!letterMarkup.includes(`<blockquote class="letter-excerpt"><p><em>${prose(introduction.excerpt)}</em></p></blockquote>`))errors.push('Letters introduction: excerpt formatting missing');
     if(!letterMarkup.includes('Bring snacks.'))errors.push('Letters introduction: Bring snacks. must stay');
     if(lettersHtml.indexOf('<form class="signup"')<lettersHtml.indexOf('</article>'))errors.push('Letters signup must follow the complete letter');
     if((lettersHtml.match(/<form\b/g)||[]).length!==1)errors.push('Letters must retain exactly one signup form');
@@ -123,22 +126,22 @@ const novel=content.books.find(b=>b.slug==='housefall');
 const ashHtml=await read('writing/ash-and-pine/index.html');
 const novelHtml=await read('writing/housefall/index.html');
 // Poetry: every line in order, each kept whole.
-const verseMarkup = excerpt => excerpt.lines.map(line=>`<span class="verse-line">${esc(line)}</span><br>`).join('\n');
+const verseMarkup = excerpt => excerpt.lines.map(line=>`<span class="verse-line">${prose(line)}</span><br>`).join('\n');
 for(const excerpt of ash.excerpts){
   if(!ashHtml.includes(verseMarkup(excerpt)))errors.push(`Ash and Pine: excerpt "${excerpt.title}" line breaks not preserved`);
-  if(!ashHtml.includes(`<figcaption>-- from “${esc(excerpt.title)}”</figcaption>`))errors.push('Ash and Pine: poem title must retain quotation marks');
+  if(!ashHtml.includes(`<figcaption>-- from “${prose(excerpt.title)}”</figcaption>`))errors.push('Ash and Pine: poem title must retain quotation marks');
 }
 if(!home.includes(verseMarkup(ash.excerpts[0])))errors.push('Home: featured excerpt line breaks not preserved');
-if(!home.includes(`<figcaption>-- from “${esc(ash.excerpts[0].title)}”</figcaption>`))errors.push('Home: poem title must retain quotation marks');
+if(!home.includes(`<figcaption>-- from “${prose(ash.excerpts[0].title)}”</figcaption>`))errors.push('Home: poem title must retain quotation marks');
 for(const excerpt of novel.excerpts){
   if(!novelHtml.includes(verseMarkup(excerpt)))errors.push('Housefall: excerpt text or line breaks missing');
-  if(!novelHtml.includes(`<figcaption>-- from <em>${esc(excerpt.title)}</em></figcaption>`))errors.push('Housefall: novel title must be italic without quotation marks');
+  if(!novelHtml.includes(`<figcaption>-- from <em>${prose(excerpt.title)}</em></figcaption>`))errors.push('Housefall: novel title must be italic without quotation marks');
 }
-if(!content.invitation.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${esc(s)}</span>`)))errors.push('Home: invitation line missing');
+if(!content.invitation.split(/(?<=\.)\s+/).every(s=>home.includes(`<span>${prose(s)}</span>`)))errors.push('Home: invitation line missing');
 if(!/<title>Andrew Grupp · Poetry, Prose and Literary Fiction<\/title>/.test(home))errors.push('Homepage genre metadata missing');
 if(!home.includes(`href="${esc(ash.purchaseUrl)}"`) || !home.includes(`href="${esc(ash.playlistUrl)}"`))errors.push('Home: Amazon and playlist links required');
 if(/home-novel|home-about/.test(home))errors.push('Home: unrelated novel or biography sections must stay absent');
-if(ash.homeDescription && !home.includes(`<p class="hero-description">${esc(ash.homeDescription)}</p>`))errors.push('Home: book description missing');
+if(ash.homeDescription && !home.includes(`<p class="hero-description">${prose(ash.homeDescription)}</p>`))errors.push('Home: book description missing');
 if(letters.enabled){
   for(const [label,html,id,before] of [
     ['Home',home,'home-letters','id="excerpt-title"'],
@@ -149,10 +152,18 @@ if(letters.enabled){
     const form=html.indexOf(`id="${id}-email"`);
     if(section<0 || form<section || html.indexOf(before)<0 || section<html.indexOf(before))errors.push(`${label}: Letters signup missing or out of order`);
   }
+  for(const [label,html,id] of [['Home',home,'home-letters'],['Ash and Pine',ashHtml,'book-letters'],['About',await read('about/index.html'),'about-letters']]){
+    const section=html.indexOf(`aria-labelledby="${id}-title"`);
+    const link=`<a class="text-link letter-sample-link" href="${label==='Home'?'./letters/':label==='Ash and Pine'?'../../letters/':'../letters/'}">Read a letter first <span class="arrow" aria-hidden="true">→</span></a>`;
+    const sectionEnd=section<0?-1:html.indexOf('</section>',section);
+    const band=sectionEnd<0?'':html.slice(section,sectionEnd);
+    if(section<0 || !band.includes(link) || band.indexOf(link)<band.indexOf('</form>'))errors.push(`${label}: sample letter link missing below the Letters signup`);
+  }
+  if(novelHtml.includes('letter-sample-link') || (await read('letters/index.html')).includes('letter-sample-link'))errors.push('Sample letter link must stay off the Housefall band and Letters page');
 }
 for(const [label,html] of [['Home',home],['Ash and Pine',ashHtml]]){
-  if(!html.includes(`href="${esc(ash.purchaseUrl)}">${esc(ash.purchaseLabel)}</a>`))errors.push(`${label}: paperback purchase button missing`);
-  if(ash.kindleUrl && !html.includes(`href="${esc(ash.kindleUrl)}">${esc(ash.kindleLabel)}</a>`))errors.push(`${label}: Kindle purchase button missing`);
+  if(!html.includes(`href="${esc(ash.purchaseUrl)}">${prose(ash.purchaseLabel)}</a>`))errors.push(`${label}: paperback purchase button missing`);
+  if(ash.kindleUrl && !html.includes(`href="${esc(ash.kindleUrl)}">${prose(ash.kindleLabel)}</a>`))errors.push(`${label}: Kindle purchase button missing`);
   if(ash.kindleUrl && ash.kindleUnlimited && !html.includes('Free to read on Kindle Unlimited'))errors.push(`${label}: Kindle Unlimited note missing`);
 }
 if(!ash.cover || !ash.coverSource || !ashHtml.includes(`src="../../${ash.cover}"`))errors.push('Approved Ash and Pine front cover must be rendered');
@@ -167,6 +178,6 @@ if(!ashBook || !ashBook.datePublished || !ashBook.author || !ashBook.sameAs?.inc
 if(!ashLd.some(n=>n['@type']==='Person'))errors.push('Person structured data missing');
 if(/isbn/i.test(ashHtml))errors.push('No ISBN is on record; do not publish one');
 if(novelHtml.includes('datePublished')||novel.purchaseUrl)errors.push('Housefall must not have a publication date or purchase link');
-if(!novelHtml.includes(`<p class="novel-tagline">`) || !novel.tagline.split(/(?<=\.)\s+/).every(s=>novelHtml.includes(`<span>${esc(s)}</span>`)))errors.push('Housefall tagline missing');
+if(!novelHtml.includes(`<p class="novel-tagline">`) || !novel.tagline.split(/(?<=\.)\s+/).every(s=>novelHtml.includes(`<span>${prose(s)}</span>`)))errors.push('Housefall tagline missing');
 if(!novel.excerpts.length && novelHtml.includes('excerpt-band'))errors.push('Housefall excerpt must stay empty until one is added');
 if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}else console.log(`PASS: ${pages.length} HTML pages, ${checked} local links/assets, Aldric intact on every page, verse line breaks, house style, metadata, landmarks, image alt text and dimensions, structured data, inactive email, letters signup, and journal visibility.`);
