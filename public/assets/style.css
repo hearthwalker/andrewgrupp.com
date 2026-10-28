@@ -46,7 +46,8 @@ main:focus{outline:none}
 
 /* Header */
 .site-header .shell{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:28px 0 22px;border-bottom:1px solid var(--line)}
-.wordmark{font-family:var(--display);font-weight:500;font-size:27px;line-height:1.2;text-decoration:none;white-space:nowrap}
+.wordmark{display:flex;align-items:center;gap:.4em;font-family:var(--display);font-weight:500;font-size:27px;line-height:1.2;text-decoration:none;white-space:nowrap}
+.wordmark-mark{display:block;flex:none;width:.62em;height:1.12em;background:var(--ink);-webkit-mask:url('./identity/spruce-small.svg') center/contain no-repeat;mask:url('./identity/spruce-small.svg') center/contain no-repeat}
 .wordmark:hover{color:inherit}
 .site-nav{display:flex;gap:30px;font-size:18px}
 .site-nav a{text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
@@ -195,7 +196,8 @@ button.button{border:0;font-family:inherit;cursor:pointer}
 .letter-excerpt{margin:24px 0 32px;padding-left:20px;border-left:1px solid var(--ember)}
 .letter-excerpt p{margin:0}
 .letter-signature{font-style:italic;margin:32px 0 0}
-.letter-subscribe{margin-top:clamp(48px,6vw,72px);padding-top:32px;border-top:1px solid var(--line)}
+.letter-divider{width:min(100%,300px);aspect-ratio:2900/540;margin:42px auto 38px;background:var(--soft);opacity:.36;-webkit-mask:url('./identity/treeline.svg') center/contain no-repeat;mask:url('./identity/treeline.svg') center/contain no-repeat}
+.letter-subscribe{margin-top:clamp(48px,6vw,72px);padding-top:32px}
 .letter-subscribe h2{font-size:28px}
 .letter-subscribe-invitation{font-size:18px;line-height:1.7;color:var(--soft);margin:12px 0 0}
 .letter-subscribe .signup{max-width:none;margin:24px 0 0}
