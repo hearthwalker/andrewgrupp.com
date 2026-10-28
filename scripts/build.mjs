@@ -21,7 +21,7 @@ const letters = site.letters || {};
 const lettersEnabled = letters.enabled === true;
 const cloudflareToken = site.analytics?.cloudflareToken;
 if (cloudflareToken != null && !/^[a-f0-9]{32}$/.test(cloudflareToken)) throw new Error('Cloudflare Web Analytics needs the 32-character site token from its beacon snippet.');
-const analytics = cloudflareToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
+const analytics = cloudflareToken ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
 if (lettersEnabled && !/^https:\/\/app\.kit\.com\/forms\/\d+\/subscriptions$/.test(letters.formAction || '')) throw new Error('Letters need a Kit form action: https://app.kit.com/forms/<id>/subscriptions');
 for (const collection of [site.books, entries]) {
   if (new Set(collection.map(item => item.slug)).size !== collection.length) throw new Error('Duplicate slug.');

@@ -7,7 +7,7 @@ const pages = files.filter(f=>f.endsWith('.html'));
 const content=JSON.parse(await readFile('content/site.json','utf8'));
 const letters=content.letters||{};
 const cloudflareToken=content.analytics?.cloudflareToken;
-const analytics=cloudflareToken ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
+const analytics=cloudflareToken ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='${JSON.stringify({token:cloudflareToken})}'></script>` : '';
 const errors=[];
 let checked=0;
 const siteBase = new URL((await readFile(path.join(root,'index.html'),'utf8')).match(/rel="canonical" href="([^"]+)/)[1]);

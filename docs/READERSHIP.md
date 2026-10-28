@@ -1,6 +1,6 @@
 # Readership work -- October 27, 2026
 
-## Prepared in this checkout
+## Site changes
 
 - [x] Kit signup directly below the homepage Hearthwalker excerpt, with the supplied invitation.
 - [x] Same signup beneath the Ash and Pine playlist.
@@ -8,17 +8,18 @@
 - [x] Free to read on Kindle Unlimited beneath the Kindle button, per the author's KDP Select confirmation.
 - [x] Homepage copy about the daughter never held, children 800 miles away, a God who didn't show, and the fire that stayed lit, drawn from the existing description.
 - [x] Housefall retains its Letters signup.
-- [x] Optional Cloudflare beacon integration, disabled until a real site token is supplied.
+- [x] Cloudflare Web Analytics beacon configured with the author's site token.
 
-These are local changes until deployed through the existing GitHub Pages workflow.
+Published through the existing GitHub Pages workflow on October 27, 2026.
 
 Validation: the build and site checker pass for all 10 HTML pages and 179 local links/assets. Isolated builds also pass with a configured analytics token and with Letters disabled. Browser review covered the homepage at desktop and 390px, plus Ash and Pine at 390px and 320px; checked phone layouts had no horizontal overflow. Screenshots are in the ignored `artifacts/readership/` directory. No new subscription was submitted during this review.
 
 ## Cloudflare activation
 
-- [ ] In [Cloudflare Web Analytics](https://dash.cloudflare.com/?to=/:account/web-analytics), add `andrewgrupp.com` as a site.
-- [ ] Copy the site token from the supplied JavaScript snippet into `analytics.cloudflareToken` in `content/site.json`. This is a public beacon token, not an account API credential.
-- [ ] Build, check and deploy the site, then confirm visits appear in the Cloudflare dashboard.
+- [x] Site token supplied by the author from the Cloudflare Web Analytics setup.
+- [x] Copy the site token from the supplied JavaScript snippet into `analytics.cloudflareToken` in `content/site.json`. This is a public beacon token, not an account API credential.
+- [x] Build, check and deploy the site with the beacon on every page.
+- [ ] Confirm visits appear in the [Cloudflare Web Analytics dashboard](https://dash.cloudflare.com/?to=/:account/web-analytics).
 
 The site stays on GitHub Pages with its current DNS. Follow Cloudflare's [setup for sites not proxied through Cloudflare](https://developers.cloudflare.com/web-analytics/get-started/).
 

@@ -15,7 +15,7 @@ The site is live at **https://andrewgrupp.com** on GitHub Pages with HTTPS enfor
 - **Letters (email list):** Kit's free Newsletter plan. Form `10089306`, with email confirmation required. `hello@andrewgrupp.com` is Kit's default sender. The signup is on the Housefall page and `/letters/`, `/letters/thanks/` and `/letters/confirmed/`. Kit's form settings redirect to the last two after signup and after confirmation.
 - **Kit emails:** the form's confirmation email doubles as the welcome message: a "Yes, send me letters" button (ember `#9C4A2B`) near the top, then the opening of "Hearthwalker" and a link to the Ash and Pine page. Email footers use Kit's shared mailing address, which keeps the author's residence private and meets CAN-SPAM. A test signup reached the Gmail inbox on October 24, 2026.
 
-Privacy: the site itself loads no scripts or trackers. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
+Analytics: Cloudflare Web Analytics is enabled on every page using the author's site token supplied October 27, 2026. The module script loads from `static.cloudflareinsights.com`. Kit's emails track opens and clicks by default; review the tracking options in Kit's settings if you'd rather limit them.
 
 To change the Kit form, update `letters.formAction` in `content/site.json`; the build accepts only `https://app.kit.com/forms/<ID>/subscriptions`. Setting `letters.enabled` to `false` removes every form, the Letters pages and the navigation link.
 

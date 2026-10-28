@@ -13,7 +13,7 @@
   "email": "inquiries@andrewgrupp.com",
   "emailEnabled": true,
   "analytics": {
-    "cloudflareToken": null
+    "cloudflareToken": "416d3855ddee448480f602821c46f367"
   },
   "letters": {
     "enabled": true,
