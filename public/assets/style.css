@@ -204,9 +204,9 @@ button.button{border:0;font-family:inherit;cursor:pointer}
 .aldric-note{display:none;position:absolute;right:0;bottom:calc(100% + 4px);padding:5px 10px;background:#f2ede3;color:#262922;white-space:nowrap;font-size:12px;line-height:1.6;box-shadow:0 0 0 1px #cbc7ba;pointer-events:none}
 .aldric[open]>.aldric-note,.aldric:hover>.aldric-note,.aldric:focus-within>.aldric-note{display:block}
 
-/* A slow settle on arrival, nothing more. */
+/* A brief settle on arrival, nothing more. */
 @media(prefers-reduced-motion:no-preference){
-  main{animation:settle 1.1s ease-out both}
+  main{animation:settle .35s ease-out both}
   @keyframes settle{from{opacity:0}to{opacity:1}}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}

@@ -8,7 +8,7 @@
   "biography": [
     "Andrew Grupp writes about what people carry: fatherhood, grief, faith and its unraveling, and the daily discipline of kindness. His first book, Ash and Pine, a collection of poetry and prose, was published in 2026.",
     "He was born in Concord, Massachusetts, and raised in South Dakota -- a New Englander on paper, a plainsman by everything since. The northern prairie, with its weather, its distances and its long winters, runs through all of his work.",
-    "He is at work on Housefall, a literary historical novel about a father who loses his hall to a stranger and refuses both vengeance and disappearance on the road back to his children. The novel is coming early 2027. He lives in Nebraska."
+    "He is at work on Housefall, a mythic novel about a father who loses his hall to a stranger and refuses both vengeance and disappearance on the road back to his children. The novel is coming early 2027. He lives in Nebraska."
   ],
   "email": "inquiries@andrewgrupp.com",
   "emailEnabled": true,
@@ -96,8 +96,8 @@
       "slug": "housefall",
       "title": "Housefall",
       "form": "novel",
-      "subtitle": "A literary historical novel",
-      "category": "Historical fiction",
+      "subtitle": "A mythic novel",
+      "category": "Mythic fiction",
       "status": "Coming early 2027",
       "year": null,
       "tagline": "The hall still stands. Everything that made it a home is gone.",
@@ -105,7 +105,7 @@
         "In the Northern Marches, Marek has exchanged the wars of his youth for the quiet labors of husbandry and fatherhood. Beside his wife, Roswyn, and their four children, he has built a life measured in seasons, ordinary rituals, and the familiar comforts of home.",
         "One winter evening, a traveler arrives seeking shelter.",
         "Marek opens the door.",
-        "Housefall is a literary historical novel about the uneasy distance between love and loyalty, the wounds we inflict upon those we cherish, and what remains of a life when its foundations give way."
+        "Housefall is a mythic novel about the uneasy distance between love and loyalty, the wounds we inflict upon those we cherish, and what remains of a life when its foundations give way."
       ],
       "excerpts": [{"title": "Housefall", "lines": ["Grief is a poor horse.", "It carries badly."]}],
       "praise": [],

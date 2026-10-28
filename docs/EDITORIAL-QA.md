@@ -63,7 +63,7 @@ The 320px review led to an additional reduction from 46px to 44px, allowing the 
 - Homepage checks prohibit photography and require the aria-hidden color field. Every generated page must include the native goat disclosure and exact discovery text. No stale landscape claim remains in the biography.
 - Skip to content reaches main; the next Tab reaches Explore the writing with a visible focus outline. Space toggles the goat, and its note is visible on keyboard focus, pointer hover and click activation. The target measures 44 by 44 CSS pixels. Opening/closing it leaves document and footer heights unchanged. Pointer activation exercises the same native disclosure behavior available to touch users; no physical touchscreen test was performed.
 - Rendered text contrast passes WCAG AA thresholds, including small metadata, footer text and the large monogram's copper dot. The sage field and copper edge carry no text. These are accessibility basics, not a formal conformance audit.
-- The Ash and Pine cover, responsive variants, source record and alt text remain unchanged. Housefall remains historical fiction in progress with the approved synopsis and tagline verbatim, no invented date, cover or purchase destination.
+- The Ash and Pine cover, responsive variants, source record and alt text remain unchanged. Housefall remains a mythic novel in progress with the approved synopsis and tagline verbatim, no invented date, cover or purchase destination.
 
 ## Art-direction critique
 

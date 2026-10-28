@@ -20,7 +20,7 @@ Edit `content/site.json`. Text is escaped automatically; paragraphs are plain st
 
 - **Biography:** update `biography` paragraphs and `introduction`.
 - **Correspondence:** `inquiries@andrewgrupp.com` forwards to the author's inbox and is published on the Contact page (`emailEnabled: true`). `hello@andrewgrupp.com` remains active for Kit. Setting `emailEnabled` to `false` removes the page and its links.
-- **Letters (email list):** `letters` holds the Kit signup. A signup band appears beneath the homepage excerpt, beneath the Ash and Pine playlist, on Housefall and on `/letters/`. Each is a plain HTML form posting to Kit, with no JavaScript. `invitation` and `invitationDetail` supply the new bands; `deck`, `description` and `note` supply the other copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
+- **Letters (email list):** `letters` holds the Kit signup. A signup band appears beneath the homepage excerpt, beneath the Ash and Pine playlist, at the bottom of About, on Housefall and on `/letters/`. Each is a plain HTML form posting to Kit, with no JavaScript. `invitation` and `invitationDetail` supply the new bands; `deck`, `description` and `note` supply the other copy. Setting `enabled` to `false` removes every form and Letters page. See [the publication record](docs/LAUNCH.md) for the Kit setup.
 - **Homepage:** the hero features the first published book with a cover (Ash and Pine): its cover, `status`, `heroLine`, `homeDescription`, format purchase buttons, playlist link and first excerpt. The `invitation` line closes the excerpt band, followed by Letters signup. Housefall and About are reached from the navigation. The Writing page shelves the entire bibliography.
 - **Book description:** edit the book’s `description` array, one paragraph per item.
 - **Excerpts:** each book's `excerpts` is a list of `{ "title": "...", "lines": ["...", "..."] }`. Every string in `lines` is one line, kept whole; long lines turn over with a hanging indent on phones. Set a novel's book-level `form` to `"novel"` for italic caption titles without quotation marks; poem titles retain quotation marks. An empty list renders nothing.
@@ -40,7 +40,7 @@ The supplied photo originals are retained locally in the ignored `reference-asse
 
 Contact is generated and linked only when both `email` and `emailEnabled` are set. Journal is generated only when published entries exist. Until then, neither page appears in navigation or the sitemap. The footer contains no inactive correspondence link.
 
-Book metadata lives with each book. Housefall is forthcoming historical fiction, coming early 2027. Its `year` remains `null` until publication so it uses the forthcoming-book layout; the release window lives in `status`, not an invented exact publication date.
+Book metadata lives with each book. Housefall is a forthcoming mythic novel, coming early 2027. Its `year` remains `null` until publication so it uses the forthcoming-book layout; the release window lives in `status`, not an invented exact publication date.
 
 ## Publish a journal entry
 
