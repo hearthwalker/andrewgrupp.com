@@ -97,6 +97,9 @@ main:focus{outline:none}
 .page-content{padding-bottom:clamp(64px,8vw,112px)}
 .page-heading{padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px)}
 .page-heading h1{font-size:clamp(50px,6vw,76px)}
+/* Section labels and page titles share one hierarchy across the four main pages. */
+.section-heading>.label{font-size:17px;line-height:1.5;margin-bottom:18px}
+.section-heading h1{font-size:clamp(40px,6vw,76px)}
 .page-heading .deck{font-style:italic;font-size:21px;color:var(--soft);margin:16px 0 0}
 .prose{max-width:var(--reading)}
 .prose p:last-child{margin-bottom:0}
@@ -127,7 +130,7 @@ main:focus{outline:none}
 /* About */
 .about-layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(40px,6.5vw,104px);align-items:start;padding-top:clamp(40px,6vw,80px)}
 .portrait{margin:0;justify-self:end;width:min(100%,440px)}
-.about-text h1{font-size:clamp(50px,6vw,76px);margin-bottom:24px}
+.about-text>.section-heading{margin-bottom:24px}
 .about-text .lede{margin-bottom:32px}
 .about-text .text-link{margin-top:30px}
 
@@ -192,7 +195,6 @@ button.button{border:0;font-family:inherit;cursor:pointer}
 .letter-heading{padding:clamp(40px,6vw,72px) 0 32px}
 .letter-heading>.label{display:flex;align-items:center;gap:.5em;margin-bottom:18px}
 .letter-intro{font-size:16px;line-height:1.6;color:var(--soft);margin:20px 0 0}
-.letter-heading h1{font-size:clamp(44px,5vw,60px)}
 .letters-author-mark{display:block;flex:none;width:.42em;height:.82em;background:var(--ink);-webkit-mask:url('./identity/spruce-small.svg') center/contain no-repeat;mask:url('./identity/spruce-small.svg') center/contain no-repeat}
 .letter-date{display:block;font-size:16px;font-style:italic;color:var(--soft);margin-top:18px}
 .letter-body{line-height:1.8}
