@@ -49,7 +49,7 @@ const paragraphs = values => values.map(p => `<p>${prose(p)}</p>`).join('\n');
 // Escape prose before adding emphasis to the two book titles in the biography.
 const biographyParagraphs = site.biography.map(p => `<p>${prose(p).replace(/\b(Ash and Pine|Housefall)\b/g, '<em>$1</em>')}</p>`).join('\n');
 const dateLabel = date => { const parsed = new Date(`${date}T12:00:00Z`); if (Number.isNaN(parsed.valueOf()) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error('Invalid journal date.'); return new Intl.DateTimeFormat('en-US',{month:'long',day:'numeric',year:'numeric',timeZone:'UTC'}).format(parsed); };
-const pageHeading = (title, deck='', section='') => `<header class="page-heading${section ? ' section-heading' : ''}">${section ? `<p class="label">${prose(section)}</p>` : ''}<h1>${prose(title)}</h1>${deck ? `<p class="deck">${prose(deck)}</p>` : ''}</header>`;
+const pageHeading = (title, deck='', section='') => `<header class="page-heading${section ? ' section-heading' : ''}">${section && section !== title ? `<p class="label">${prose(section)}</p>` : ''}<h1>${prose(title)}</h1>${deck ? `<p class="deck">${prose(deck)}</p>` : ''}</header>`;
 const bookUrl = book => `writing/${book.slug}/`;
 // Display lines break between sentences rather than wherever the measure runs out.
 const sentences = text => text.match(/[^.]+\.\s*/g).map(s => `<span>${prose(s.trim())}</span>`).join(' ');
