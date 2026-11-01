@@ -18,23 +18,27 @@
   "letters": {
     "enabled": true,
     "formAction": "https://app.kit.com/forms/10089306/subscriptions",
-    "introduction": {
-      "date": "2026-10-27",
+    "essay": {
+      "title": "The Extra Hour",
+      "date": "2026-10-31",
       "paragraphs": [
-        "It’s an October Tuesday night in the rig in Albion. It’s cool out, leaves changing, not quite snow-cold yet. I’m at the small table that never sits level, phone in my hand, coffee gone cold. Eleven days ago, at this same table, I typed my own name into Amazon’s search bar -- bad habit -- and the screen went white, then loaded. Ash and Pine. My hands didn’t move. My thumb hovered over the glass. I woke the screen again just to see it there. Then I set the phone down, picked it up, set it down again.",
-        "The first buyers were friends, coworkers, family. Then the graph went quiet. Today two sales popped up I couldn’t account for. Strangers, maybe. The line lifted and I grinned -- and then I just sat there, because somewhere a person I’ll never meet is reading “Love” on a lunch break, or “Colorado” at a kitchen table with one lamp on, and I’m not in the room for it. For years these poems lived in notebooks and in the margins of nights at the lake. Now they’re out there without me.",
-        "There was one ridiculous night early on. For a few hours, the book hit #51 in Amazon’s grief poetry rankings, just ahead of Bukowski and Mary Oliver. Neither literary giant was in any danger. Apparently Amazon’s algorithm had been drinking from the same spaghetti sauce jar I was. Screenshot saved before Amazon sobered up.",
-        "These letters won’t follow a rigid schedule. They’re just a way for you to stay connected to the writing. I’ll send new poems, old poems, the ones that didn’t make the book -- more than you’d think, some cut for good reason, some I still miss. And I’ll show you Housefall as I build it: a father loses his hall and refuses both vengeance and disappearance on the long road back to his children.",
-        "One line from it:"
+        "The microwave clock, glowing sickly green in the dark, stutters from 1:59 to 2:00 and there it is. The government’s Extra Hour. Handed back in the dead of night when nobody’s awake to claim it. I punch buttons to roll it back to 1:00am, then twist the dial on the analog clock, one hour backwards, the closest thing to time travel I’ll ever experience.",
+        "I’m awake. Drifting back and forth through the ancient motorhome, listening to rain drum the roof. Somewhere forward: a squat pumpkin candle, recently extinguished, smelling of smoke and autumn and dust. A cold coffeemaker. A stack of printed pages on the desk behind the passenger seat -- my novel. Thirty days of work on it starting tomorrow. A deadline I’ve been running from for a decade.",
+        "The clock reads 1:01. A minute I already lived. A minute the universe owes me.",
+        "I know the aspirational answer. Brew the good dark roast. Write. Seize the gift. Be grateful.",
+        "But the real answer is simpler and uglier.",
+        "I stand up. Cold floor. No light. I navigate by memory and green glow. The dinette light glows warm when I flip the heavy metal switch. I take down the cheap instant coffee, spoon it into a chipped mug, fill it with bottled tap water. Cold. I sit on the blue sofa and wrap my hands around it. The coffeemaker can sit idle another night.",
+        "This is my extra hour: drinking cold, shitty coffee in the dark, thinking about all the ways I’ve failed.",
+        "That’s the cruelty. An hour given back isn’t a gift; it’s an audit. A spotlight on the empty ledgers. Not time to *do, *time to *reckon*.",
+        "The clock on the wall clicks to 1:15. I sip the bitter water. I think about a girl with a laugh like wind chimes.",
+        "That’s the mercy. Permission to do nothing. For sixty minutes, I’m off the hook. Not a failure, a man in a time-out. Tomorrow, the thirty days, the novel, my whole life -- it all has to wait. It’s 1:17 am. The world is asleep. I can just… be.",
+        "1:28 am. The novel beckons. I scroll through my outline at the dinette and bravely retreat to the couch.",
+        "At 1:42 I’m tired. The real kind -- not from work, but from being my own worst company.",
+        "The click is quieter now. 1:59. Then 2:00.",
+        "It’s over. The hour is gone. The novel is still on the desk. The laptop glows, a futile summons. The coffeemaker is still cold. I’m still here. I put down the mug and walk to the aft bunk."
       ],
-      "excerpt": "Grief is a poor horse. It carries badly.",
-      "closing": [
-        "The first letter comes Halloween night, before the clocks give back their hour. I’ll bring one of the poems that didn’t make it -- something I still miss.",
-        "Until then, there’s room beside the fire. Bring snacks."
-      ],
-      "signature": "-- Andrew",
-      "subscribeHeading": "Letters, by email",
-      "subscribeInvitation": "Occasional poetry, prose and correspondence by email, beginning with a Halloween letter."
+      "subscribeHeading": "The next letter, in your inbox.",
+      "subscribeInvitation": "Read this one here. Subscribe for future letters: poems, essays, notes from the road, and a first look at Housefall."
     },
     "deck": "Occasional dispatches from beside the fire.",
     "invitation": "Some of it doesn't make the book.",

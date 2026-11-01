@@ -102,19 +102,19 @@ if(!content.emailEnabled && files.some(f=>path.relative(root,f).startsWith('cont
 const read = route => readFile(path.join(root,route),'utf8');
 if(!letters.enabled && files.some(f=>path.relative(root,f).startsWith('letters'+path.sep)))errors.push('Inactive Letters pages must not be generated');
 if(letters.enabled){
-  const introduction=letters.introduction;
+  const essay=letters.essay;
   const lettersHtml=await read('letters/index.html');
-  if(introduction){
-    const letterMarkup=lettersHtml.match(/<article class="letter"[^>]*>([\s\S]*?)<\/article>/)?.[1]||'';
-    const actual=[...letterMarkup.matchAll(/<p(?: class="letter-signature")?>([\s\S]*?)<\/p>/g)].map(match=>match[1].replace(/<\/?em>/g,''));
-    const expected=[...introduction.paragraphs,introduction.excerpt,...introduction.closing,introduction.signature].map(prose);
-    if(JSON.stringify(actual)!==JSON.stringify(expected))errors.push('Letters introduction: wording, punctuation or paragraph breaks changed');
-    if(!letterMarkup.includes(`<time class="letter-date" datetime="${esc(introduction.date)}">`))errors.push('Letters introduction: dateline missing');
-    if(!letterMarkup.includes(`<blockquote class="letter-excerpt"><p><em>${prose(introduction.excerpt)}</em></p></blockquote>`))errors.push('Letters introduction: excerpt formatting missing');
-    if(!letterMarkup.includes('Bring snacks.'))errors.push('Letters introduction: Bring snacks. must stay');
-    if(lettersHtml.indexOf('<form class="signup"')<lettersHtml.indexOf('</article>'))errors.push('Letters signup must follow the complete letter');
-    if((lettersHtml.match(/<form\b/g)||[]).length!==1)errors.push('Letters must retain exactly one signup form');
-  }
+  const letterMarkup=lettersHtml.match(/<article class="letter"[^>]*>([\s\S]*?)<\/article>/)?.[1]||'';
+  const body=letterMarkup.match(/<div class="prose letter-body">([\s\S]*?)<\/div>/)?.[1]||'';
+  const actual=[...body.matchAll(/<p>([\s\S]*?)<\/p>/g)].map(match=>match[1].replace(/<\/?em>/g,''));
+  const expected=essay.paragraphs.map(p=>esc(p.replace(/\*([^*]+)\*/g,'$1')));
+  if(JSON.stringify(actual)!==JSON.stringify(expected))errors.push('The Extra Hour: wording, punctuation or paragraph breaks changed');
+  if(!letterMarkup.includes(`<h1 id="letters-title">${esc(essay.title)}</h1>`))errors.push('Essay title missing');
+  if(!letterMarkup.includes(`datetime="${esc(essay.date)}"`))errors.push('Essay dateline missing');
+  if(!body.endsWith('walk to the aft bunk.</p>'))errors.push('Essay must end at the aft bunk');
+  if(!body.includes('<em>do, </em>time to <em>reckon</em>'))errors.push('Essay emphasis missing');
+  if(lettersHtml.indexOf('<form class="signup"')<lettersHtml.indexOf('</article>'))errors.push('Letters signup must follow the complete essay');
+  if((lettersHtml.match(/<form\b/g)||[]).length!==1)errors.push('Letters must retain exactly one signup form');
   for(const route of ['letters/index.html','letters/thanks/index.html','letters/confirmed/index.html'])try{await stat(path.join(root,route))}catch{errors.push(`Letters: ${route} missing`)}
   const sitemap=await read('sitemap.xml');
   if(!sitemap.includes('/letters/</loc>') || sitemap.includes('/letters/thanks/') || sitemap.includes('/letters/confirmed/'))errors.push('Letters: only the signup page belongs in the sitemap');
